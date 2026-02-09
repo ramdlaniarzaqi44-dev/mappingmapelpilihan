@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Mapel Pilihan Penunjang Universitas (Pro V3 - Expert Diagnosis)</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --background: #f1f5f9;
+            --card: #ffffff;
+            --text-main: #0f172a;
+            --text-sub: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+        }
+
+        header h1 { font-size: 1.8rem; margin-bottom: 10px; font-weight: 700; }
+        header p { opacity: 0.9; font-size: 0.95rem; max-width: 600px; margin: 0 auto; }
+
+        /* Progress Bar */
+        .progress-container { background: #e2e8f0; height: 8px; width: 100%; }
+        .progress-bar { height: 100%; background: var(--success); width: 0%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Sections */
+        .step-content { padding: 40px; display: none; animation: slideUp 0.5s ease; }
+        .step-content.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { color: var(--primary); margin-bottom: 25px; font-size: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
+        select, input[type="number"] { width: 100%; padding: 12px 15px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1rem; transition: 0.3s; background: #f8fafc; }
+        select:focus, input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(37,99,235,0.1); background: #fff; }
+
+        /* Grid System for Inputs */
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        
+        /* Question Styling */
+        .question-item { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s; }
+        .question-item:hover { transform: translateY(-2px); border-color: #cbd5e1; }
+        .likert-scale { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; }
+        .likert-option { display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 18%; position: relative; }
+        .likert-option input { width: 22px; height: 22px; cursor: pointer; accent-color: var(--primary); margin-bottom: 8px; z-index: 2; }
+        .likert-label { font-size: 0.75rem; text-align: center; color: #64748b; font-weight: 600; }
+        .scroll-area { max-height: 550px; overflow-y: auto; padding-right: 15px; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; background: #f8fafc; }
+
+        /* Buttons */
+        .btn-group { margin-top: 40px; display: flex; justify-content: space-between; gap: 15px; }
+        button { padding: 14px 28px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-next { background: var(--primary); color: white; margin-left: auto; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2); }
+        .btn-next:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(37, 99, 235, 0.3); }
+        .btn-prev { background: #94a3b8; color: white; }
+        .btn-prev:hover { background: #64748b; }
+
+        /* Result Section */
+        .result-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+        @media (max-width: 850px) { .result-grid { grid-template-columns: 1fr; } }
+
+        .result-card { background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); height: 100%; }
+        
+        .mapel-item { background: #f8fafc; padding: 15px; margin-bottom: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid transparent; transition: all 0.3s; }
+        .mapel-item:hover { background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        .badge { padding: 6px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-both { background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; }
+        .badge-mandatory { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        .badge-supporting { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+
+        .psych-insight { background: #fffbeb; border-left: 5px solid var(--warning); padding: 20px; font-size: 0.95rem; color: #92400e; border-radius: 8px; margin-top: 25px; line-height: 1.7; }
+
+        /* Validity Meter */
+        .validity-box { text-align: center; padding: 30px 20px; border-radius: 12px; border: 2px solid; margin-bottom: 20px; background: white; }
+        .validity-score { font-size: 3rem; font-weight: 800; line-height: 1; margin-bottom: 5px; }
+        .validity-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; opacity: 0.8; }
+        
+        /* Helper Text */
+        .helper-text { font-size: 0.85rem; color: #64748b; margin-top: 5px; font-style: italic; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+            margin-top: auto;
+            background: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Navigator Mapel & Jurusan Universitas</h1>
+        <p>Sistem Rekomendasi Validitas Tinggi: Memadukan Aturan Akademis SNBP & Profil Psikometrik RIASEC</p>
+    </header>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <form id="mainForm" onsubmit="event.preventDefault();">
+        
+        <!-- STEP 1: Tujuan Karir -->
+        <div class="step-content active" id="step1">
+            <h2>Langkah 1: Tentukan Target Studi (Plan A & B)</h2>
+            <p>Pilih jurusan secara spesifik agar sistem bisa menghitung peluang dengan presisi.</p>
+            
+            <div class="result-grid">
+                <div class="form-group" style="background: #eff6ff; padding: 20px; border-radius: 10px; border: 1px solid #bfdbfe;">
+                    <label style="color: #1e40af;">🎯 Pilihan 1 (Prioritas Utama):</label>
+                    <select id="targetMajor1" required class="major-select">
+                        <option value="" disabled selected>-- Pilih Target Utama --</option>
+                        <!-- Options generated by JS -->
+                    </select>
+                </div>
+
+                <div class="form-group" style="background: #f5f3ff; padding: 20px; border-radius: 10px; border: 1px solid #ddd6fe;">
+                    <label style="color: #5b21b6;">🛡️ Pilihan 2 (Rencana Cadangan):</label>
+                    <select id="targetMajor2" required class="major-select">
+                        <option value="" disabled selected>-- Pilih Target Cadangan --</option>
+                        <!-- Options generated by JS -->
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-top:20px; padding:15px; background:#f0fdf4; border-radius:8px; border:1px solid #bbf7d0; font-size:0.9rem; color:#166534;">
+                <strong>ℹ️ Catatan Update:</strong> Daftar jurusan telah diperbarui mencakup <b>Ilmu Komunikasi, Hubungan Internasional, Pertanian, Kesehatan Masyarakat, dan Pendidikan</b>.
+            </div>
+
+            <div class="btn-group">
+                <button class="btn-next" onclick="nextStep(1)">Lanjut: Input Nilai Spesifik &rsaquo;</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: Input Akademik -->
+        <div class="step-content" id="step2">
+            <h2>Langkah 2: Validasi Akademik (Nilai Rapor Kelas 10)</h2>
+            <p>Masukkan nilai spesifik mata pelajaran (0-100). <br><span style="color:#ef4444; font-size:0.9rem;">*Penting: Input nilai per mapel secara terpisah agar validitas mencapai 100%.</span></p>
+
+            <div class="input-grid">
+                <!-- Mapel Umum -->
+                <div class="form-group">
+                    <label>Matematika Umum</label>
+                    <input type="number" id="score_mtk" min="0" max="100" placeholder="0-100" required>
+                </div>
+                <div class="form-group">
+                    <label>Bahasa Inggris</label>
+                    <input type="number" id="score_bing" min="0" max="100" placeholder="0-100" required>
+                </div>
+                <div class="form-group">
+                    <label>Bahasa Indonesia</label>
+                    <input type="number" id="score_indo" min="0" max="100" placeholder="0-100" required>
+                </div>
+                <div class="form-group">
+                    <label>Informatika</label>
+                    <input type="number" id="score_info" min="0" max="100" placeholder="0-100">
+                </div>
+                
+                <!-- Rumpun IPA (Spesifik) -->
+                <div class="form-group">
+                    <label>Fisika</label>
+                    <input type="number" id="score_fis" min="0" max="100" placeholder="Nilai Fisika" required>
+                </div>
+                <div class="form-group">
+                    <label>Kimia</label>
+                    <input type="number" id="score_kim" min="0" max="100" placeholder="Nilai Kimia" required>
+                </div>
+                <div class="form-group">
+                    <label>Biologi</label>
+                    <input type="number" id="score_bio" min="0" max="100" placeholder="Nilai Biologi" required>
+                </div>
+
+                <!-- Rumpun IPS (Spesifik) -->
+                <div class="form-group">
+                    <label>Ekonomi</label>
+                    <input type="number" id="score_eko" min="0" max="100" placeholder="Nilai Ekonomi" required>
+                </div>
+                <div class="form-group">
+                    <label>Sosiologi</label>
+                    <input type="number" id="score_sos" min="0" max="100" placeholder="Nilai Sosiologi" required>
+                </div>
+                <div class="form-group">
+                    <label>Geografi</label>
+                    <input type="number" id="score_geo" min="0" max="100" placeholder="Nilai Geografi" required>
+                </div>
+                <div class="form-group">
+                    <label>Sejarah</label>
+                    <input type="number" id="score_sej" min="0" max="100" placeholder="Nilai Sejarah" required>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn-prev" onclick="prevStep(2)">&lsaquo; Kembali</button>
+                <button class="btn-next" onclick="nextStep(2)">Lanjut: Tes Minat (RIASEC) &rsaquo;</button>
+            </div>
+        </div>
+
+        <!-- STEP 3: Validasi Minat (RIASEC 48 Items) -->
+        <div class="step-content" id="step3">
+            <h2>Langkah 3: Asesmen Minat (48 Soal)</h2>
+            <p>Jawablah dengan jujur. Pertanyaan ini memetakan tipe kepribadianmu: <b>R</b>ealistic, <b>I</b>nvestigative, <b>A</b>rtistic, <b>S</b>ocial, <b>E</b>nterprising, <b>C</b>onventional.</p>
+            
+            <div class="scroll-area">
+                <div id="dynamicQuestions"></div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn-prev" onclick="prevStep(3)">&lsaquo; Kembali</button>
+                <button class="btn-next" onclick="calculateResult()">✨ Analisis Validitas & Hasil</button>
+            </div>
+        </div>
+
+        <!-- STEP 4: Hasil -->
+        <div class="step-content" id="step4">
+            <h2 style="text-align: center; border:none; margin-bottom:30px;">Laporan Analisis Studi Komprehensif</h2>
+
+            <div class="result-grid">
+                <!-- Kolom Kiri: Daftar Mapel -->
+                <div class="result-card">
+                    <h3 style="margin-bottom: 20px; color: var(--primary); display:flex; align-items:center; gap:10px;">
+                        <span>📋</span> 5 Rekomendasi Mapel Pilihan
+                    </h3>
+                    <ul id="finalList" style="list-style:none; padding:0;"></ul>
+                    <div class="helper-text" style="margin-top:15px;">
+                        *Rekomendasi ini disusun berdasarkan Permendikbudristek No. 345/M/2022 tentang Mata Pelajaran Pendukung SNBP.
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan: Meteran Validitas -->
+                <div>
+                    <div id="validityBox" class="validity-box">
+                        <div class="validity-score" id="validityScoreText">0%</div>
+                        <div class="validity-label">Tingkat Kevalidan Pilihan</div>
+                        <div style="font-size: 0.8rem; margin-top: 10px; color: #555;">(Match Score: Minat + Akademik)</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h4 style="margin-bottom:10px; font-size:0.95rem; color:#64748b;">Kode Kepribadian (RIASEC):</h4>
+                        <div id="riasecScores" style="font-family: monospace; font-weight:bold; font-size:1.1rem; color: var(--text-main);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="psych-insight" id="finalPsychAnalysis"></div>
+            
+            <div class="btn-group">
+                <button class="btn-prev" onclick="location.reload()">↺ Mulai Ulang</button>
+                <button class="btn-next" onclick="window.print()">🖨️ Cetak Hasil (PDF)</button>
+            </div>
+        </div>
+
+    </form>
+    
+    <footer>
+        &copy; Aplikasi ini adalah buatan dari <strong>Pak Ndutz BK Al-Multazam</strong>.
+    </footer>
+</div>
+
+<script>
+    // --- 1. DATA MASTER JURUSAN & ATURAN SNBP ---
+    
+    const majorsData = {
+        'kedokteran': { 
+            name: 'Kedokteran / Dokter Gigi / Veteriner', 
+            req: ['biologi', 'kimia'], 
+            riasec: ['I', 'S', 'R'] 
+        },
+        'kesmas_farmasi': { 
+            name: 'Kesehatan Masy. / Farmasi / Gizi / Keperawatan', 
+            req: ['biologi', 'kimia'], 
+            riasec: ['S', 'I', 'C'] 
+        },
+        'teknik_fisika': { 
+            name: 'Teknik (Sipil, Mesin, Elektro, Fisika, Penerbangan)', 
+            req: ['fisika', 'mtk_lanjut'], 
+            riasec: ['R', 'I', 'C'] 
+        },
+        'teknik_kimia': { 
+            name: 'Teknik Kimia / Lingkungan / Metalurgi', 
+            req: ['kimia', 'fisika', 'mtk_lanjut'], 
+            riasec: ['I', 'R'] 
+        },
+        'informatika': { 
+            name: 'Informatika / Ilmu Komputer / Sistem Informasi', 
+            req: ['mtk_lanjut', 'informatika'], 
+            riasec: ['I', 'C', 'R'] 
+        },
+        'mipa_fis': { 
+            name: 'MIPA (Matematika / Fisika / Statistika)', 
+            req: ['mtk_lanjut', 'fisika'], 
+            riasec: ['I', 'C'] 
+        },
+        'mipa_bio': { 
+            name: 'MIPA (Biologi / Kimia)', 
+            req: ['biologi', 'kimia'], 
+            riasec: ['I'] 
+        },
+        'pertanian': { 
+            name: 'Pertanian / Agroteknologi / Kehutanan', 
+            req: ['biologi'], 
+            riasec: ['R', 'I', 'E'] 
+        },
+        'ekonomi': { 
+            name: 'Ekonomi / Pembangunan / Bisnis', 
+            req: ['ekonomi', 'mtk_lanjut'], 
+            riasec: ['E', 'C', 'S'] 
+        },
+        'akuntansi': { 
+            name: 'Akuntansi / Manajemen Keuangan', 
+            req: ['ekonomi', 'mtk_lanjut'], 
+            riasec: ['C', 'E'] 
+        },
+        'komunikasi': { 
+            name: 'Ilmu Komunikasi / Hubungan Masyarakat / Jurnalistik', 
+            req: ['sosiologi', 'bing_lanjut'], 
+            riasec: ['A', 'E', 'S'] 
+        },
+        'hi_hukum': { 
+            name: 'Hukum / Hubungan Internasional / Ilmu Politik', 
+            req: ['sosiologi', 'bing_lanjut'], 
+            riasec: ['E', 'S', 'I'] 
+        },
+        'psikologi': { 
+            name: 'Psikologi', 
+            req: ['sosiologi', 'biologi', 'mtk_lanjut'], 
+            riasec: ['S', 'I', 'A'] 
+        },
+        'sastra': { 
+            name: 'Sastra (Inggris/Indonesia/Asing) / Ilmu Budaya', 
+            req: ['bing_lanjut', 'sosiologi'], 
+            riasec: ['A', 'S', 'I'] 
+        },
+        'pendidikan': { 
+            name: 'Pendidikan / Keguruan (Semua Mapel)', 
+            req: ['sosiologi', 'bing_lanjut'], 
+            riasec: ['S', 'A', 'E'] 
+        },
+        'dkv': { 
+            name: 'Desain Komunikasi Visual / Seni Rupa / Arsitektur', 
+            req: ['informatika', 'bing_lanjut'], 
+            riasec: ['A', 'R', 'I'] 
+        }
+    };
+
+    // --- 2. DATABASE MAPEL SEKOLAH ---
+    const subjectsDB = [
+        { id: 'mtk_lanjut', name: 'Matematika Tkt. Lanjut', riasec: ['I', 'C'], inputKey: 'score_mtk' },
+        { id: 'fisika', name: 'Fisika', riasec: ['R', 'I'], inputKey: 'score_fis' },
+        { id: 'kimia', name: 'Kimia', riasec: ['I', 'R'], inputKey: 'score_kim' },
+        { id: 'biologi', name: 'Biologi', riasec: ['I', 'S'], inputKey: 'score_bio' },
+        { id: 'informatika', name: 'Informatika', riasec: ['C', 'I', 'R'], inputKey: 'score_info' },
+        { id: 'ekonomi', name: 'Ekonomi', riasec: ['E', 'C'], inputKey: 'score_eko' },
+        { id: 'sosiologi', name: 'Sosiologi', riasec: ['S', 'E', 'A'], inputKey: 'score_sos' },
+        { id: 'geografi', name: 'Geografi', riasec: ['R', 'I', 'S'], inputKey: 'score_geo' },
+        { id: 'bing_lanjut', name: 'B. Inggris Tkt. Lanjut', riasec: ['A', 'S', 'E'], inputKey: 'score_bing' },
+        { id: 'sejarah', name: 'Sejarah Tkt. Lanjut', riasec: ['S', 'I', 'A'], inputKey: 'score_sej' }
+    ];
+
+    // --- 3. 48 RIASEC QUESTIONS ---
+    const psychQuestions = [
+        // Realistic (R)
+        { t: 'R', q: 'Memperbaiki alat elektronik/mesin.' }, { t: 'R', q: 'Bekerja fisik di luar ruangan.' },
+        { t: 'R', q: 'Merakit model bangunan/benda.' }, { t: 'R', q: 'Menggunakan perkakas (obeng/palu).' },
+        { t: 'R', q: 'Mengurus tanaman atau hewan.' }, { t: 'R', q: 'Kegiatan olahraga/atletik.' },
+        { t: 'R', q: 'Memahami cara kerja mesin mobil.' }, { t: 'R', q: 'Membuat kerajinan kayu/logam.' },
+        // Investigative (I)
+        { t: 'I', q: 'Memecahkan soal matematika rumit.' }, { t: 'I', q: 'Melakukan eksperimen sains.' },
+        { t: 'I', q: 'Membaca artikel ilmiah/sains.' }, { t: 'I', q: 'Menganalisis grafik dan data.' },
+        { t: 'I', q: 'Bermain game strategi/logika.' }, { t: 'I', q: 'Belajar tentang alam semesta.' },
+        { t: 'I', q: 'Riset penyebab suatu masalah.' }, { t: 'I', q: 'Meneliti fakta sejarah secara detail.' },
+        // Artistic (A)
+        { t: 'A', q: 'Menggambar, melukis, desain grafis.' }, { t: 'A', q: 'Menulis cerpen, puisi, atau naskah.' },
+        { t: 'A', q: 'Bermain musik atau bernyanyi.' }, { t: 'A', q: 'Merancang pakaian atau fashion.' },
+        { t: 'A', q: 'Menonton pertunjukan seni/teater.' }, { t: 'A', q: 'Tampil unik dan berbeda dari orang lain.' },
+        { t: 'A', q: 'Membuat konten video/fotografi.' }, { t: 'A', q: 'Mendekorasi ruangan agar estetik.' },
+        // Social (S)
+        { t: 'S', q: 'Mengajar atau membimbing teman.' }, { t: 'S', q: 'Mendengarkan curhat masalah orang lain.' },
+        { t: 'S', q: 'Bekerja dalam tim/kelompok.' }, { t: 'S', q: 'Melakukan kegiatan amal/sosial.' },
+        { t: 'S', q: 'Mempelajari psikologi manusia.' }, { t: 'S', q: 'Merawat orang sakit.' },
+        { t: 'S', q: 'Menengahi pertengkaran teman.' }, { t: 'S', q: 'Bertemu dan ngobrol dengan orang baru.' },
+        // Enterprising (E)
+        { t: 'E', q: 'Berjualan produk atau bisnis.' }, { t: 'E', q: 'Berbicara/pidato di depan umum.' },
+        { t: 'E', q: 'Menjadi pemimpin/ketua organisasi.' }, { t: 'E', q: 'Berdebat atau negosiasi.' },
+        { t: 'E', q: 'Mengelola sebuah acara (event).' }, { t: 'E', q: 'Mempelajari pasar saham/ekonomi.' },
+        { t: 'E', q: 'Mengambil risiko untuk sukses.' }, { t: 'E', q: 'Bercita-cita menjadi manajer/CEO.' },
+        // Conventional (C)
+        { t: 'C', q: 'Membuat jadwal kegiatan teratur.' }, { t: 'C', q: 'Mengatur keuangan/pembukuan.' },
+        { t: 'C', q: 'Input data ke Excel/Komputer.' }, { t: 'C', q: 'Mengikuti aturan yang jelas.' },
+        { t: 'C', q: 'Menulis kode program (coding) rapi.' }, { t: 'C', q: 'Mengarsipkan dokumen.' },
+        { t: 'C', q: 'Memeriksa detail kesalahan tulisan.' }, { t: 'C', q: 'Mengoleksi barang dengan urutan tertentu.' }
+    ];
+
+    psychQuestions.sort(() => Math.random() - 0.5);
+
+    // --- STATE ---
+    let userProfile = { major1: '', major2: '', scores: {}, riasecScores: {} };
+
+    window.onload = function() {
+        const sel1 = document.getElementById('targetMajor1');
+        const sel2 = document.getElementById('targetMajor2');
+        const sortedKeys = Object.keys(majorsData).sort((a,b) => majorsData[a].name.localeCompare(majorsData[b].name));
+        sortedKeys.forEach(key => {
+            const opt = `<option value="${key}">${majorsData[key].name}</option>`;
+            sel1.innerHTML += opt;
+            sel2.innerHTML += opt;
+        });
+    };
+
+    // --- UI FUNCTIONS ---
+    function updateProgress(step) {
+        document.getElementById('progressBar').style.width = (step / 4) * 100 + '%';
+    }
+
+    function nextStep(step) {
+        if (step === 1) {
+            const m1 = document.getElementById('targetMajor1').value;
+            const m2 = document.getElementById('targetMajor2').value;
+            if (!m1 || !m2) { alert("Wajib pilih kedua jurusan!"); return; }
+            if (m1 === m2) { if(!confirm("Jurusan Utama dan Cadangan sama. Yakin?")) return; }
+            userProfile.major1 = m1; userProfile.major2 = m2;
+            renderQuestions();
+        }
+        if (step === 2) {
+            const inputs = document.querySelectorAll('#step2 input');
+            let complete = true;
+            inputs.forEach(inp => {
+                if(inp.hasAttribute('required') && !inp.value) complete = false;
+                userProfile.scores[inp.id] = parseInt(inp.value) || 0;
+            });
+            if(!complete) { alert("Mohon lengkapi semua nilai mapel wajib!"); return; }
+        }
+        
+        document.getElementById(`step${step}`).classList.remove('active');
+        document.getElementById(`step${step + 1}`).classList.add('active');
+        updateProgress(step + 1);
+        window.scrollTo(0, 0);
+    }
+
+    function prevStep(step) {
+        document.getElementById(`step${step}`).classList.remove('active');
+        document.getElementById(`step${step - 1}`).classList.add('active');
+        updateProgress(step - 1);
+    }
+
+    function renderQuestions() {
+        const container = document.getElementById('dynamicQuestions');
+        if(container.innerHTML.trim() === '') {
+            psychQuestions.forEach((q, idx) => {
+                container.innerHTML += `
+                    <div class="question-item">
+                        <div style="font-weight:600; margin-bottom:10px;">${idx + 1}. ${q.q}</div>
+                        <div class="likert-scale">
+                            ${[1,2,3,4,5].map(val => `
+                                <label class="likert-option">
+                                    <input type="radio" name="q_${idx}" value="${val}" data-type="${q.t}" required>
+                                    <span class="likert-label">${val}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    }
+
+    // --- LOGIC ---
+    function calculateResult() {
+        const inputs = document.querySelectorAll('#step3 input:checked');
+        if (inputs.length < psychQuestions.length) { alert("Mohon jawab semua 48 soal!"); return; }
+
+        // RIASEC Calculation
+        userProfile.riasecScores = { R:0, I:0, A:0, S:0, E:0, C:0 };
+        inputs.forEach(inp => {
+            userProfile.riasecScores[inp.getAttribute('data-type')] += parseInt(inp.value);
+        });
+
+        const normalize = (s) => (s / 40) * 100;
+
+        // Subject Scoring
+        subjectsDB.forEach(sub => {
+            let academic = userProfile.scores[sub.inputKey] || 0;
+            let interestRaw = 0;
+            sub.riasec.forEach(type => { interestRaw += userProfile.riasecScores[type]; });
+            let interestAvg = normalize(interestRaw / sub.riasec.length);
+
+            sub.finalScore = (academic * 0.4) + (interestAvg * 0.6);
+            sub.interestScore = interestAvg;
+            sub.academicScore = academic;
+        });
+
+        // Priority Logic
+        const major1Data = majorsData[userProfile.major1];
+        const major2Data = majorsData[userProfile.major2];
+        const req1 = major1Data.req;
+        const req2 = major2Data.req;
+        
+        let finalSelection = [];
+        let remainingSubjects = [];
+
+        subjectsDB.forEach(sub => {
+            const isReq1 = req1.includes(sub.id);
+            const isReq2 = req2.includes(sub.id);
+
+            if (isReq1 && isReq2) {
+                sub.status = 'Wajib Pilihan 1 & 2'; sub.priority = 1; sub.badgeClass = 'badge-both';
+                finalSelection.push(sub);
+            } else if (isReq1) {
+                sub.status = 'Wajib Pilihan 1'; sub.priority = 2; sub.badgeClass = 'badge-mandatory';
+                finalSelection.push(sub);
+            } else if (isReq2) {
+                sub.status = 'Wajib Pilihan 2'; sub.priority = 3; sub.badgeClass = 'badge-mandatory';
+                finalSelection.push(sub);
+            } else {
+                sub.status = 'Pendukung Minat'; sub.priority = 4; sub.badgeClass = 'badge-supporting';
+                remainingSubjects.push(sub);
+            }
+        });
+
+        remainingSubjects.sort((a, b) => b.finalScore - a.finalScore);
+        const slotsNeeded = 5 - finalSelection.length;
+        if (slotsNeeded > 0) finalSelection = finalSelection.concat(remainingSubjects.slice(0, slotsNeeded));
+        finalSelection.sort((a, b) => a.priority - b.priority);
+
+        // Validity Calculation with Detailed Diagnosis
+        const validityResult = calculateDiagnosticValidity(major1Data);
+
+        displayResults(finalSelection, validityResult);
+        nextStep(3);
+    }
+
+    function calculateDiagnosticValidity(m1Data) {
+        // A. Psych Match
+        const userScores = userProfile.riasecScores;
+        const expectedTraits = m1Data.riasec;
+        let traitMatch = 0;
+        let maxTraitMatch = expectedTraits.length * 40; 
+        expectedTraits.forEach(t => { traitMatch += userScores[t]; });
+        let psychScore = (traitMatch / maxTraitMatch) * 100;
+
+        // B. Academic Check
+        let academicPenalties = 0;
+        let lowGradeSubjects = [];
+        
+        m1Data.req.forEach(reqId => {
+            const subj = subjectsDB.find(s => s.id === reqId);
+            const grade = userProfile.scores[subj.inputKey];
+            if (grade < 75) {
+                academicPenalties += 20; 
+                lowGradeSubjects.push(subj.name);
+            }
+        });
+
+        let finalVal = Math.round(psychScore - academicPenalties);
+        if (finalVal < 0) finalVal = 0;
+        if (finalVal > 100) finalVal = 100;
+
+        return {
+            score: finalVal,
+            psychScore: psychScore,
+            academicPenalties: academicPenalties,
+            lowSubjects: lowGradeSubjects
+        };
+    }
+
+    function displayResults(selection, diagnosis) {
+        const list = document.getElementById('finalList');
+        list.innerHTML = '';
+        selection.forEach(sub => {
+            list.innerHTML += `
+                <li class="mapel-item" style="border-left-color: ${sub.finalScore > 75 ? '#10b981' : '#f59e0b'}">
+                    <div>
+                        <strong style="font-size:1.05rem;">${sub.name}</strong>
+                        <div style="font-size:0.85rem; color:#64748b; margin-top:2px;">
+                           Skor: ${Math.round(sub.finalScore)}% (Nilai: ${sub.academicScore} | Minat: ${Math.round(sub.interestScore)}%)
+                        </div>
+                    </div>
+                    <span class="badge ${sub.badgeClass}">${sub.status}</span>
+                </li>
+            `;
+        });
+
+        // Validity Box
+        const vBox = document.getElementById('validityBox');
+        const vText = document.getElementById('validityScoreText');
+        vText.innerText = diagnosis.score + '%';
+        
+        if(diagnosis.score >= 80) {
+            vBox.style.borderColor = '#10b981'; vBox.style.background = '#f0fdf4'; vBox.style.color = '#166534';
+        } else if (diagnosis.score >= 50) {
+            vBox.style.borderColor = '#f59e0b'; vBox.style.background = '#fffbeb'; vBox.style.color = '#92400e';
+        } else {
+            vBox.style.borderColor = '#ef4444'; vBox.style.background = '#fef2f2'; vBox.style.color = '#991b1b';
+        }
+
+        // Psych Codes
+        const scores = userProfile.riasecScores;
+        const traits = Object.keys(scores).sort((a,b) => scores[b] - scores[a]);
+        const top3 = traits.slice(0, 3).join("-");
+        document.getElementById('riasecScores').innerText = `Kode Anda: ${top3}`;
+
+        // EXPERT DIAGNOSIS TEXT
+        const analysisDiv = document.getElementById('finalPsychAnalysis');
+        let msg = '';
+        const m1Name = majorsData[userProfile.major1].name;
+
+        // Logic Diagnosis Expert
+        if (diagnosis.score >= 80) {
+            msg = `✅ <b>Kondisi Ideal:</b><br>Profil kepribadianmu (${top3}) dan nilai akademikmu sangat selaras dengan tuntutan jurusan <b>${m1Name}</b>. Kamu punya modal kuat untuk sukses dan menikmati kuliah.`;
+        } else if (diagnosis.psychScore >= 70 && diagnosis.academicPenalties > 0) {
+            msg = `⚠️ <b>Minat Tinggi, Akademik Perlu Didorong:</b><br>Secara kepribadian kamu SANGAT COCOK di jurusan ini, tapi nilai rapor mata pelajaran wajib (${diagnosis.lowSubjects.join(", ")}) masih di bawah standar aman. <br><b>Saran:</b> Fokus habis-habisan menaikkan nilai mapel tersebut di kelas 11.`;
+        } else if (diagnosis.psychScore < 60 && diagnosis.academicPenalties === 0) {
+            msg = `⚠️ <b>Mampu tapi Risiko Bosan:</b><br>Secara nilai kamu mampu masuk jurusan ini, tapi profil kepribadianmu (${top3}) kurang cocok dengan karakter jurusan tersebut. <br><b>Risiko:</b> Kamu mungkin bisa masuk, tapi berpotensi merasa salah jurusan atau tidak menikmati perkuliahan.`;
+        } else {
+            msg = `⛔ <b>Mismatch Total (Risiko Tinggi):</b><br>Baik dari segi nilai maupun minat, jurusan <b>${m1Name}</b> tampaknya kurang sesuai untukmu saat ini. Disarankan eksplorasi jurusan lain yang lebih sesuai dengan kekuatanmu agar tidak membuang waktu.`;
+        }
+
+        analysisDiv.innerHTML = `<strong>Diagnosa Ahli:</strong><br>${msg}`;
+    }
+</script>
+
+</body>
+</html>
