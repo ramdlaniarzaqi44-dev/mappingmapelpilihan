@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Mapel Pilihan Penunjang Universitas (Pro V5 - Kedinasan Support)</title>
+    <title>Aplikasi Mapel Pilihan Penunjang Universitas (Pro V7 - User Friendly)</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -12,7 +12,7 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --kedinasan: #4f46e5; /* Warna khusus kedinasan */
+            --kedinasan: #4f46e5;
             --background: #f8fafc;
             --card: #ffffff;
             --text-main: #0f172a;
@@ -50,7 +50,6 @@
             position: relative;
         }
 
-        /* HEADER DYNAMIC */
         header {
             background: linear-gradient(135deg, var(--primary), #1e40af);
             color: white;
@@ -73,91 +72,32 @@
 
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        header h1 { 
-            font-size: clamp(1.5rem, 4vw, 2.2rem); 
-            margin-bottom: 8px; 
-            font-weight: 800; 
-            position: relative;
-        }
-        
-        header p { 
-            opacity: 0.95; 
-            font-size: clamp(0.9rem, 3vw, 1.1rem); 
-            max-width: 600px; 
-            margin: 0 auto; 
-            position: relative;
-        }
+        header h1 { font-size: clamp(1.5rem, 4vw, 2.2rem); margin-bottom: 8px; font-weight: 800; position: relative; }
+        header p { opacity: 0.95; font-size: clamp(0.9rem, 3vw, 1.1rem); max-width: 600px; margin: 0 auto; position: relative; }
 
-        /* PROGRESS BAR */
         .progress-container { background: #e2e8f0; height: 6px; width: 100%; }
         .progress-bar { height: 100%; background: var(--success); width: 0%; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-        /* SECTIONS & ANIMATIONS */
-        .step-content { 
-            padding: 30px; 
-            display: none; 
-            flex-grow: 1;
-        }
-        
-        .step-content.active { 
-            display: block; 
-            animation: fadeInScale 0.4s ease-out; 
-        }
+        .step-content { padding: 30px; display: none; flex-grow: 1; }
+        .step-content.active { display: block; animation: fadeInScale 0.4s ease-out; }
 
         @keyframes fadeInScale {
             from { opacity: 0; transform: scale(0.98) translateY(10px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        h2 { 
-            color: var(--primary); 
-            margin-bottom: 25px; 
-            font-size: clamp(1.3rem, 3vw, 1.8rem); 
-            border-bottom: 2px solid #e2e8f0; 
-            padding-bottom: 15px; 
-        }
+        h2 { color: var(--primary); margin-bottom: 25px; font-size: clamp(1.3rem, 3vw, 1.8rem); border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
 
-        /* FORM ELEMENTS */
         .form-group { margin-bottom: 20px; }
-        
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 600; 
-            color: var(--text-main); 
-            font-size: 0.95rem; 
-        }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
         
         select, input[type="number"] { 
-            width: 100%; 
-            padding: 14px; 
-            border: 2px solid #cbd5e1; 
-            border-radius: 8px; 
-            font-size: 1rem; 
-            transition: all 0.2s; 
-            background: #f8fafc;
-            appearance: none;
+            width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1rem; transition: all 0.2s; background: #f8fafc; appearance: none;
         }
+        select:focus, input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
 
-        select:focus, input:focus { 
-            outline: none; 
-            border-color: var(--primary); 
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); 
-        }
-
-        /* GRID SYSTEM */
-        .input-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-            gap: 20px; 
-        }
-
-        .result-grid { 
-            display: grid; 
-            grid-template-columns: 2fr 1fr; 
-            gap: 25px; 
-        }
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .result-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
 
         @media (max-width: 768px) {
             .step-content { padding: 20px; }
@@ -167,178 +107,61 @@
             button { width: 100%; padding: 16px; }
         }
 
-        /* QUESTION CARDS */
-        .question-item { 
-            background: #fff; 
-            padding: 20px; 
-            margin-bottom: 15px; 
-            border-radius: 10px; 
-            border: 1px solid #e2e8f0; 
-            transition: transform 0.2s, border-color 0.2s; 
+        /* SKALA LIKERT BARU */
+        .scale-legend {
+            display: flex;
+            justify-content: space-between;
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            color: #475569;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         
-        .question-item:hover { 
-            border-color: var(--primary); 
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
+        .scale-item { text-align: center; flex: 1; }
+        .scale-num { font-weight: bold; font-size: 1.1rem; color: var(--primary); display: block; }
+        .scale-desc { display: block; font-size: 0.7rem; line-height: 1.2; }
 
-        /* Kedinasan Special Card */
-        .question-item.kedinasan-card {
-            border-left: 5px solid var(--kedinasan);
-            background: #f5f3ff;
-        }
+        .question-item { background: #fff; padding: 20px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #e2e8f0; transition: transform 0.2s, border-color 0.2s; }
+        .question-item:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .question-item.kedinasan-card { border-left: 5px solid var(--kedinasan); background: #f5f3ff; }
 
-        .likert-scale { 
-            display: flex; 
-            justify-content: space-between; 
-            margin-top: 15px; 
-            padding-top: 15px; 
-            border-top: 1px dashed #e2e8f0; 
-        }
+        .likert-scale { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; }
+        .likert-option { display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; flex: 1; }
+        .likert-option input { margin-bottom: 5px; cursor: pointer; accent-color: var(--primary); width: 20px; height: 20px; }
+        .likert-label { font-size: 0.7rem; color: #64748b; text-align: center; }
 
-        .likert-option { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            cursor: pointer; 
-            position: relative; 
-            flex: 1;
-        }
-        
-        .likert-option input { 
-            margin-bottom: 5px; 
-            cursor: pointer; 
-            accent-color: var(--primary);
-            width: 20px; 
-            height: 20px;
-        }
+        .scroll-area { max-height: 60vh; overflow-y: auto; padding: 10px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; }
 
-        .scroll-area { 
-            max-height: 60vh; 
-            overflow-y: auto; 
-            padding: 10px; 
-            border: 1px solid #e2e8f0; 
-            border-radius: 12px; 
-            background: #f8fafc; 
-        }
-
-        /* BUTTONS */
-        .btn-group { 
-            margin-top: 30px; 
-            display: flex; 
-            justify-content: space-between; 
-        }
-        
-        button { 
-            padding: 14px 30px; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: 1rem; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: all 0.2s; 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-        }
-        
-        .btn-next { 
-            background: var(--primary); 
-            color: white; 
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3); 
-        }
-        
-        .btn-next:hover { 
-            background: var(--primary-dark); 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4); 
-        }
-        
+        .btn-group { margin-top: 30px; display: flex; justify-content: space-between; }
+        button { padding: 14px 30px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3); }
+        .btn-next:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4); }
         .btn-prev { background: var(--secondary); color: white; }
         .btn-prev:hover { background: #475569; }
 
-        /* RESULTS */
-        .result-card { 
-            background: white; 
-            border: 1px solid #e2e8f0; 
-            padding: 25px; 
-            border-radius: 12px; 
-            height: 100%; 
-        }
-
-        .mapel-item { 
-            background: #f8fafc; 
-            padding: 16px; 
-            margin-bottom: 12px; 
-            border-radius: 8px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-left: 5px solid #cbd5e1; 
-            transition: all 0.2s;
-        }
-
+        .result-card { background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 12px; height: 100%; }
+        .mapel-item { background: #f8fafc; padding: 16px; margin-bottom: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid #cbd5e1; transition: all 0.2s; }
         .mapel-item:hover { transform: translateX(5px); background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
-        .badge { 
-            padding: 6px 12px; 
-            border-radius: 20px; 
-            font-size: 0.75rem; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            white-space: nowrap; 
-            margin-left: 10px;
-        }
-
+        .badge { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; margin-left: 10px; }
         .badge-both { background: #fce7f3; color: #be185d; }
         .badge-mandatory { background: #fee2e2; color: #b91c1c; }
         .badge-supporting { background: #dbeafe; color: #1d4ed8; }
 
-        .psych-insight { 
-            background: #fffbeb; 
-            border-left: 5px solid var(--warning); 
-            padding: 20px; 
-            border-radius: 8px; 
-            margin-top: 25px; 
-            font-size: 0.95rem; 
-            line-height: 1.7; 
-        }
+        .psych-insight { background: #fffbeb; border-left: 5px solid var(--warning); padding: 20px; border-radius: 8px; margin-top: 25px; font-size: 0.95rem; line-height: 1.7; }
 
-        .validity-box { 
-            text-align: center; 
-            padding: 30px; 
-            border-radius: 16px; 
-            border: 2px solid #e2e8f0; 
-            margin-bottom: 20px; 
-            background: #fff; 
-            transition: all 0.5s ease;
-        }
-        
-        .validity-score { 
-            font-size: 3.5rem; 
-            font-weight: 900; 
-            line-height: 1; 
-            margin-bottom: 5px; 
-        }
-        
-        .validity-label { 
-            font-size: 0.8rem; 
-            text-transform: uppercase; 
-            letter-spacing: 1.5px; 
-            font-weight: 700; 
-            color: var(--text-sub); 
-        }
+        .validity-box { text-align: center; padding: 30px; border-radius: 16px; border: 2px solid #e2e8f0; margin-bottom: 20px; background: #fff; transition: all 0.5s ease; }
+        .validity-score { font-size: 3.5rem; font-weight: 900; line-height: 1; margin-bottom: 5px; }
+        .validity-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; color: var(--text-sub); }
 
-        footer { 
-            text-align: center; 
-            padding: 20px; 
-            color: var(--text-sub); 
-            font-size: 0.9rem; 
-            border-top: 1px solid #e2e8f0; 
-            background: #f1f5f9; 
-            margin-top: auto; 
-        }
+        footer { text-align: center; padding: 20px; color: var(--text-sub); font-size: 0.9rem; border-top: 1px solid #e2e8f0; background: #f1f5f9; margin-top: auto; }
     </style>
 </head>
 <body>
@@ -447,9 +270,18 @@
 
         <!-- STEP 3: Validasi Minat (RIASEC + Kedinasan) -->
         <div class="step-content" id="step3">
-            <h2>Langkah 3: Asesmen Minat & Kesiapan</h2>
-            <p>Jawablah dengan jujur (1-5). <span id="kedinasan-badge" style="display:none; color: var(--kedinasan); font-weight:bold;">+ Termasuk Tes Kesiapan Kedinasan</span></p>
+            <h2>Langkah 3: Asesmen Minat (48 Soal)</h2>
+            <p>Jawablah dengan jujur sesuai apa yang kamu rasakan sehari-hari. <span id="kedinasan-badge" style="display:none; color: var(--kedinasan); font-weight:bold;">+ Tes Kesiapan Kedinasan</span></p>
             
+            <!-- KETERANGAN SKALA (LEGEND) -->
+            <div class="scale-legend">
+                <div class="scale-item"><span class="scale-num">1</span><span class="scale-desc">Sangat<br>Tidak Suka</span></div>
+                <div class="scale-item"><span class="scale-num">2</span><span class="scale-desc">Tidak<br>Suka</span></div>
+                <div class="scale-item"><span class="scale-num">3</span><span class="scale-desc">Biasa<br>Saja</span></div>
+                <div class="scale-item"><span class="scale-num">4</span><span class="scale-desc"><br>Suka</span></div>
+                <div class="scale-item"><span class="scale-num">5</span><span class="scale-desc">Sangat<br>Suka</span></div>
+            </div>
+
             <div class="scroll-area">
                 <div id="dynamicQuestions"></div>
             </div>
@@ -507,11 +339,7 @@
 <script>
     // --- 1. DATA MASTER JURUSAN & ATURAN SNBP ---
     const majorsData = {
-        'kedinasan': { 
-            name: 'Sekolah Kedinasan (STAN/STIS/IPDN/AKPOL/AKMIL)', 
-            req: ['mtk_lanjut', 'bing_lanjut'], 
-            riasec: ['E', 'C', 'R'] // Enterprising (Leadership), Conventional (Rules), Realistic (Physical)
-        },
+        'kedinasan': { name: 'Sekolah Kedinasan (STAN/STIS/IPDN/AKPOL/AKMIL)', req: ['mtk_lanjut', 'bing_lanjut'], riasec: ['E', 'C', 'R'] },
         'kedokteran': { name: 'Kedokteran / Dokter Gigi / Veteriner', req: ['biologi', 'kimia'], riasec: ['I', 'S', 'R'] },
         'kesmas_farmasi': { name: 'Kesehatan Masy. / Farmasi / Gizi', req: ['biologi', 'kimia'], riasec: ['S', 'I', 'C'] },
         'teknik_fisika': { name: 'Teknik (Sipil, Mesin, Elektro, Penerbangan)', req: ['fisika', 'mtk_lanjut'], riasec: ['R', 'I', 'C'] },
@@ -544,29 +372,74 @@
         { id: 'sejarah', name: 'Sejarah Tkt. Lanjut', riasec: ['S', 'I', 'A'], inputKey: 'score_sej' }
     ];
 
-    // --- 3. PERTANYAAN (RIASEC + KEDINASAN) ---
+    // --- 3. PERTANYAAN (Simple & Friendly) ---
     const psychQuestions = [
-        // General RIASEC
-        { t: 'R', q: 'Memperbaiki alat elektronik/mesin.' }, { t: 'R', q: 'Bekerja fisik di luar ruangan.' },
-        { t: 'R', q: 'Merakit model bangunan/benda.' }, { t: 'R', q: 'Menggunakan perkakas.' },
-        { t: 'I', q: 'Memecahkan soal matematika rumit.' }, { t: 'I', q: 'Eksperimen sains di laboratorium.' },
-        { t: 'I', q: 'Membaca artikel ilmiah.' }, { t: 'I', q: 'Analisis data statistik.' },
-        { t: 'A', q: 'Menggambar, melukis, desain.' }, { t: 'A', q: 'Menulis cerita kreatif.' },
-        { t: 'A', q: 'Bermain musik/nyanyi.' }, { t: 'A', q: 'Fotografi atau videografi.' },
-        { t: 'S', q: 'Mengajar teman.' }, { t: 'S', q: 'Mendengarkan curhat.' },
-        { t: 'S', q: 'Kerja kelompok/tim.' }, { t: 'S', q: 'Kegiatan sosial/amal.' },
-        { t: 'E', q: 'Jualan atau bisnis.' }, { t: 'E', q: 'Pidato/Presentasi.' },
-        { t: 'E', q: 'Memimpin organisasi.' }, { t: 'E', q: 'Negosiasi/Debat.' },
-        { t: 'C', q: 'Membuat jadwal teratur.' }, { t: 'C', q: 'Pembukuan keuangan.' },
-        { t: 'C', q: 'Input data komputer.' }, { t: 'C', q: 'Ikuti aturan/prosedur.' }
+        // Realistic
+        { t: 'R', q: 'Suka mengutak-atik atau memperbaiki barang rusak (elektronik/mesin).' },
+        { t: 'R', q: 'Senang kegiatan fisik di luar ruangan (berkebun, mendaki, olahraga).' },
+        { t: 'R', q: 'Suka merakit benda, lego, atau membuat prakarya teknik.' },
+        { t: 'R', q: 'Terbiasa menggunakan alat pertukangan (obeng, palu, dll).' },
+        { t: 'R', q: 'Suka merawat hewan peliharaan atau tanaman.' },
+        { t: 'R', q: 'Aktif dalam olahraga atau kegiatan fisik yang menguras keringat.' },
+        { t: 'R', q: 'Penasaran dengan cara kerja mesin motor atau mobil.' },
+        { t: 'R', q: 'Suka membuat kerajinan dari kayu, logam, atau bahan keras.' },
+        
+        // Investigative
+        { t: 'I', q: 'Tertantang mengerjakan soal matematika yang sulit.' },
+        { t: 'I', q: 'Suka melakukan percobaan atau eksperimen sains.' },
+        { t: 'I', q: 'Senang membaca info tentang penemuan sains/teknologi terbaru.' },
+        { t: 'I', q: 'Suka melihat grafik data atau statistik.' },
+        { t: 'I', q: 'Suka main game yang butuh strategi dan mikir keras.' },
+        { t: 'I', q: 'Tertarik belajar tentang antariksa atau alam semesta.' },
+        { t: 'I', q: 'Suka mencari tahu "kenapa" sesuatu bisa terjadi.' },
+        { t: 'I', q: 'Suka meneliti fakta sejarah secara mendalam.' },
+        
+        // Artistic
+        { t: 'A', q: 'Hobi menggambar, melukis, atau desain grafis.' },
+        { t: 'A', q: 'Suka menulis cerpen, puisi, atau caption yang puitis.' },
+        { t: 'A', q: 'Bisa memainkan alat musik atau bernyanyi.' },
+        { t: 'A', q: 'Suka mix & match pakaian atau tertarik dunia fashion.' },
+        { t: 'A', q: 'Menikmati nonton teater, film seni, atau pameran.' },
+        { t: 'A', q: 'Suka tampil beda dengan gaya unik sendiri.' },
+        { t: 'A', q: 'Hobi fotografi atau bikin video estetik.' },
+        { t: 'A', q: 'Suka menata kamar atau dekorasi ruangan.' },
+        
+        // Social
+        { t: 'S', q: 'Senang mengajari teman yang belum paham pelajaran.' },
+        { t: 'S', q: 'Sering jadi tempat curhat teman.' },
+        { t: 'S', q: 'Lebih suka kerja kelompok daripada sendirian.' },
+        { t: 'S', q: 'Suka ikut kegiatan sosial atau membantu orang lain.' },
+        { t: 'S', q: 'Tertarik mempelajari sifat dan perilaku manusia.' },
+        { t: 'S', q: 'Tidak jijik membantu merawat orang sakit atau luka.' },
+        { t: 'S', q: 'Suka mendamaikan teman yang lagi berantem.' },
+        { t: 'S', q: 'Mudah akrab dan ngobrol dengan orang baru.' },
+        
+        // Enterprising
+        { t: 'E', q: 'Tertarik jualan atau cari uang sendiri.' },
+        { t: 'E', q: 'Berani ngomong atau presentasi di depan umum.' },
+        { t: 'E', q: 'Suka jadi ketua kelas atau pemimpin kelompok.' },
+        { t: 'E', q: 'Jago meyakinkan orang lain (debat/negosiasi).' },
+        { t: 'E', q: 'Suka mengurus acara (event) di sekolah.' },
+        { t: 'E', q: 'Tertarik berita ekonomi atau saham.' },
+        { t: 'E', q: 'Berani ambil risiko demi peluang sukses.' },
+        { t: 'E', q: 'Punya cita-cita jadi bos atau manajer.' },
+        
+        // Conventional
+        { t: 'C', q: 'Suka bikin jadwal harian agar teratur.' },
+        { t: 'C', q: 'Teliti mengelola uang kas atau tabungan.' },
+        { t: 'C', q: 'Betah input data atau ketik-ketik di komputer.' },
+        { t: 'C', q: 'Selalu mengikuti aturan dan tata tertib.' },
+        { t: 'C', q: 'Suka coding atau hal yang punya aturan jelas.' },
+        { t: 'C', q: 'Suka merapikan file atau dokumen.' },
+        { t: 'C', q: 'Jeli melihat kesalahan kecil (typo) dalam tulisan.' },
+        { t: 'C', q: 'Suka mengoleksi atau menata barang sesuai urutan.' }
     ];
 
-    // Pertanyaan KHUSUS Kedinasan (Conditional)
     const kedinasanQuestions = [
-        { t: 'K', q: 'Saya rutin berolahraga (lari, push-up) untuk menjaga kebugaran fisik.' },
-        { t: 'K', q: 'Saya sanggup menjalani kehidupan asrama dengan aturan disiplin ketat semi-militer.' },
-        { t: 'K', q: 'Saya siap ditempatkan di seluruh wilayah Indonesia (termasuk pelosok) setelah lulus.' },
-        { t: 'K', q: 'Saya memiliki tinggi badan dan kesehatan mata (tidak buta warna) yang memadai.' }
+        { t: 'K', q: 'Saya rutin olahraga fisik (lari, push-up) untuk jaga kebugaran.' },
+        { t: 'K', q: 'Saya siap tinggal di asrama dengan disiplin ketat ala militer.' },
+        { t: 'K', q: 'Saya bersedia ditempatkan kerja di seluruh pelosok Indonesia.' },
+        { t: 'K', q: 'Tinggi badan & kesehatan mata saya memenuhi syarat kedinasan.' }
     ];
 
     let userProfile = { major1: '', major2: '', scores: {}, riasecScores: {}, kedinasanScore: 0 };
@@ -630,20 +503,17 @@
         const container = document.getElementById('dynamicQuestions');
         container.innerHTML = '';
         
-        // 1. Render General RIASEC (Shuffled)
         const generalQs = [...psychQuestions].sort(() => Math.random() - 0.5);
         
         generalQs.forEach((q, idx) => {
             container.innerHTML += createQuestionHTML(idx, q.q, q.t);
         });
 
-        // 2. Conditional: Jika pilih Kedinasan, tambah pertanyaan khusus
         if (userProfile.major1 === 'kedinasan' || userProfile.major2 === 'kedinasan') {
             document.getElementById('kedinasan-badge').style.display = 'inline';
             container.innerHTML += `<div style="margin: 30px 0 15px 0; border-top: 2px dashed #ccc; padding-top: 20px; text-align:center; font-weight:bold; color: var(--kedinasan);">📋 TES KHUSUS KEDINASAN (Fisik & Mental)</div>`;
             
             kedinasanQuestions.forEach((q, idx) => {
-                // Gunakan index lanjutan agar ID unik
                 const realIdx = generalQs.length + idx; 
                 container.innerHTML += createQuestionHTML(realIdx, q.q, q.t, true);
             });
@@ -652,26 +522,32 @@
 
     function createQuestionHTML(idx, text, type, isSpecial = false) {
         const specialClass = isSpecial ? 'kedinasan-card' : '';
+        // Label array for 1-5
+        const labels = ["Sangat Tdk Suka", "Tidak Suka", "Biasa Saja", "Suka", "Sangat Suka"];
+        
+        let optionsHTML = '';
+        for(let i=1; i<=5; i++) {
+            optionsHTML += `
+                <label class="likert-option">
+                    <input type="radio" name="q_${idx}" value="${i}" data-type="${type}" required>
+                    <span class="likert-label">${labels[i-1]}</span>
+                </label>
+            `;
+        }
+
         return `
             <div class="question-item ${specialClass}">
                 <div style="font-weight:600; margin-bottom:10px;">${text}</div>
                 <div class="likert-scale">
-                    ${[1,2,3,4,5].map(val => `
-                        <label class="likert-option">
-                            <input type="radio" name="q_${idx}" value="${val}" data-type="${type}" required>
-                            <span class="likert-label">${val}</span>
-                        </label>
-                    `).join('')}
+                    ${optionsHTML}
                 </div>
             </div>
         `;
     }
 
     function calculateResult() {
-        // Collect Inputs
         const inputs = document.querySelectorAll('#step3 input:checked');
         
-        // Count total questions needed
         let totalNeeded = psychQuestions.length;
         if (userProfile.major1 === 'kedinasan' || userProfile.major2 === 'kedinasan') {
             totalNeeded += kedinasanQuestions.length;
@@ -680,7 +556,7 @@
         if (inputs.length < totalNeeded) { alert("Mohon jawab semua pertanyaan!"); return; }
 
         userProfile.riasecScores = { R:0, I:0, A:0, S:0, E:0, C:0 };
-        userProfile.kedinasanScore = 0; // Reset
+        userProfile.kedinasanScore = 0; 
 
         inputs.forEach(inp => {
             const type = inp.getAttribute('data-type');
@@ -693,21 +569,17 @@
             }
         });
 
-        const normalize = (s, maxItems) => (s / (maxItems * 5)) * 100;
-        // Normalisasi RIASEC (tiap tipe ada sekitar 4 soal di contoh ini, sesuaikan realnya)
-        // Di sini saya pakai simple avg logic di mapel scoring.
+        const itemsPerType = 8; 
+        const maxScorePerType = itemsPerType * 5; 
 
-        // Subject Scoring
         subjectsDB.forEach(sub => {
             let academic = userProfile.scores[sub.inputKey] || 0;
             let interestRaw = 0;
             
-            // Mapel Scoring based on RIASEC
             sub.riasec.forEach(type => { interestRaw += userProfile.riasecScores[type]; });
             
-            // Avg Interest (assuming approx 4 questions per type in random pool)
-            let itemsPerType = 4; // Estimasi dari array psychQuestions (24 total / 6 tipe)
-            let interestAvg = (interestRaw / (sub.riasec.length * itemsPerType * 5)) * 100;
+            let maxPotential = sub.riasec.length * maxScorePerType;
+            let interestAvg = (interestRaw / maxPotential) * 100;
             if(interestAvg > 100) interestAvg = 100;
 
             sub.finalScore = (academic * 0.4) + (interestAvg * 0.6);
@@ -715,7 +587,6 @@
             sub.academicScore = academic;
         });
 
-        // Prioritas Mapel
         const m1Data = majorsData[userProfile.major1];
         const m2Data = majorsData[userProfile.major2];
         const req1 = m1Data.req;
@@ -754,17 +625,15 @@
     }
 
     function calculateDiagnosticValidity(m1Data) {
-        // A. Psych Match (RIASEC)
         const userScores = userProfile.riasecScores;
         const expectedTraits = m1Data.riasec;
         let traitMatch = 0;
-        let itemsPerType = 4;
+        let itemsPerType = 8; 
         let maxTraitMatch = expectedTraits.length * itemsPerType * 5; 
         
         expectedTraits.forEach(t => { traitMatch += userScores[t]; });
         let psychScore = (traitMatch / maxTraitMatch) * 100;
 
-        // B. Academic Check
         let academicPenalties = 0;
         let lowGradeSubjects = [];
         m1Data.req.forEach(reqId => {
@@ -773,16 +642,14 @@
             if (grade < 75) { academicPenalties += 15; lowGradeSubjects.push(subj.name); }
         });
 
-        // C. Kedinasan Special Check
         let kedinasanPenalty = 0;
         let kedinasanMsg = "";
         if (userProfile.major1 === 'kedinasan') {
-            // Max score kedinasan = 4 soal * 5 = 20
             const kScore = userProfile.kedinasanScore;
             const kPercent = (kScore / 20) * 100;
             
             if (kPercent < 70) {
-                kedinasanPenalty = 40; // Penalty besar jika fisik/disiplin rendah
+                kedinasanPenalty = 40; 
                 kedinasanMsg = "Skor kesiapan fisik/mental kedinasan rendah.";
             }
         }
