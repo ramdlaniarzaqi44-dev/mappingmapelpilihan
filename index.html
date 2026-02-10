@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Mapel Pilihan Penunjang Universitas (Pro V4 - Responsive UI)</title>
+    <title>Aplikasi Mapel Pilihan Penunjang Universitas (Pro V5 - Kedinasan Support)</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -12,6 +12,7 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --kedinasan: #4f46e5; /* Warna khusus kedinasan */
             --background: #f8fafc;
             --card: #ffffff;
             --text-main: #0f172a;
@@ -135,7 +136,7 @@
             font-size: 1rem; 
             transition: all 0.2s; 
             background: #f8fafc;
-            appearance: none; /* Hilangkan style default browser */
+            appearance: none;
         }
 
         select:focus, input:focus { 
@@ -145,7 +146,7 @@
             box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); 
         }
 
-        /* GRID SYSTEM (Responsive) */
+        /* GRID SYSTEM */
         .input-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
@@ -158,19 +159,12 @@
             gap: 25px; 
         }
 
-        /* Mobile specific adjustments */
         @media (max-width: 768px) {
             .step-content { padding: 20px; }
-            .input-grid { grid-template-columns: 1fr; gap: 15px; } /* 1 Kolom di HP */
+            .input-grid { grid-template-columns: 1fr; gap: 15px; }
             .result-grid { grid-template-columns: 1fr; }
-            
-            /* Tombol full width di HP */
             .btn-group { flex-direction: column-reverse; gap: 12px; }
             button { width: 100%; padding: 16px; }
-            
-            .likert-scale { gap: 5px; }
-            .likert-option { width: auto; flex: 1; }
-            .likert-option input { width: 25px; height: 25px; } /* Target sentuh lebih besar */
         }
 
         /* QUESTION CARDS */
@@ -189,6 +183,12 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
+        /* Kedinasan Special Card */
+        .question-item.kedinasan-card {
+            border-left: 5px solid var(--kedinasan);
+            background: #f5f3ff;
+        }
+
         .likert-scale { 
             display: flex; 
             justify-content: space-between; 
@@ -203,12 +203,15 @@
             align-items: center; 
             cursor: pointer; 
             position: relative; 
+            flex: 1;
         }
         
         .likert-option input { 
             margin-bottom: 5px; 
             cursor: pointer; 
             accent-color: var(--primary);
+            width: 20px; 
+            height: 20px;
         }
 
         .scroll-area { 
@@ -235,9 +238,9 @@
             font-weight: 700; 
             cursor: pointer; 
             transition: all 0.2s; 
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
         }
         
         .btn-next { 
@@ -252,16 +255,10 @@
             box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4); 
         }
         
-        .btn-prev { 
-            background: var(--secondary); 
-            color: white; 
-        }
-        
-        .btn-prev:hover { 
-            background: #475569; 
-        }
+        .btn-prev { background: var(--secondary); color: white; }
+        .btn-prev:hover { background: #475569; }
 
-        /* RESULT CARDS */
+        /* RESULTS */
         .result-card { 
             background: white; 
             border: 1px solid #e2e8f0; 
@@ -308,7 +305,6 @@
             line-height: 1.7; 
         }
 
-        /* VALIDITY METER */
         .validity-box { 
             text-align: center; 
             padding: 30px; 
@@ -349,8 +345,8 @@
 
 <div class="container">
     <header>
-        <h1>Navigator Mapel & Jurusan</h1>
-        <p>Analisis Cerdas: Aturan SNBP & Psikometrik RIASEC</p>
+        <h1>Navigator Mapel & Kedinasan</h1>
+        <p>Analisis Cerdas: Aturan SNBP, Sekolah Kedinasan & Psikometrik RIASEC</p>
     </header>
     
     <div class="progress-container">
@@ -362,7 +358,7 @@
         <!-- STEP 1: Tujuan Karir -->
         <div class="step-content active" id="step1">
             <h2>Langkah 1: Target Studi (Plan A & B)</h2>
-            <p>Pilih jurusan secara spesifik agar sistem bisa menghitung peluang dengan presisi.</p>
+            <p>Pilih jurusan atau sekolah kedinasan yang kamu impikan.</p>
             
             <div class="input-grid">
                 <div class="form-group" style="background: #eff6ff; padding: 20px; border-radius: 10px; border: 1px solid #bfdbfe;">
@@ -380,8 +376,8 @@
                 </div>
             </div>
 
-            <div style="margin-top:20px; padding:15px; background:#f0fdf4; border-radius:8px; border:1px solid #bbf7d0; font-size:0.9rem; color:#166534;">
-                <strong>ℹ️ Catatan Update:</strong> Daftar jurusan mencakup <b>Ilmu Komunikasi, Hubungan Internasional, Pertanian, Kesehatan Masyarakat, dan Pendidikan</b>.
+            <div style="margin-top:20px; padding:15px; background:#e0e7ff; border-radius:8px; border:1px solid #c7d2fe; font-size:0.9rem; color:#3730a3;">
+                <strong>👮 Info Kedinasan:</strong> Sudah ditambahkan opsi Sekolah Kedinasan (STAN, STIS, IPDN, AKPOL, AKMIL) dengan pertanyaan khusus tes fisik & mental.
             </div>
 
             <div class="btn-group">
@@ -395,7 +391,6 @@
             <p>Masukkan nilai spesifik mata pelajaran (0-100) dari Rapor Kelas 10.</p>
 
             <div class="input-grid">
-                <!-- Mapel Umum -->
                 <div class="form-group">
                     <label>Matematika Umum</label>
                     <input type="number" id="score_mtk" min="0" max="100" placeholder="0-100" required>
@@ -413,7 +408,6 @@
                     <input type="number" id="score_info" min="0" max="100" placeholder="0-100">
                 </div>
                 
-                <!-- Rumpun IPA -->
                 <div class="form-group">
                     <label>Fisika</label>
                     <input type="number" id="score_fis" min="0" max="100" placeholder="Nilai Fisika" required>
@@ -427,7 +421,6 @@
                     <input type="number" id="score_bio" min="0" max="100" placeholder="Nilai Biologi" required>
                 </div>
 
-                <!-- Rumpun IPS -->
                 <div class="form-group">
                     <label>Ekonomi</label>
                     <input type="number" id="score_eko" min="0" max="100" placeholder="Nilai Ekonomi" required>
@@ -452,10 +445,10 @@
             </div>
         </div>
 
-        <!-- STEP 3: Validasi Minat (RIASEC) -->
+        <!-- STEP 3: Validasi Minat (RIASEC + Kedinasan) -->
         <div class="step-content" id="step3">
-            <h2>Langkah 3: Asesmen Minat (48 Soal)</h2>
-            <p>Jawablah dengan jujur (1-5). Pertanyaan ini memetakan tipe kepribadianmu.</p>
+            <h2>Langkah 3: Asesmen Minat & Kesiapan</h2>
+            <p>Jawablah dengan jujur (1-5). <span id="kedinasan-badge" style="display:none; color: var(--kedinasan); font-weight:bold;">+ Termasuk Tes Kesiapan Kedinasan</span></p>
             
             <div class="scroll-area">
                 <div id="dynamicQuestions"></div>
@@ -472,23 +465,21 @@
             <h2 style="text-align: center; border:none; margin-bottom:20px;">Laporan Analisis Studi</h2>
 
             <div class="result-grid">
-                <!-- Kolom Kiri: Daftar Mapel -->
                 <div class="result-card">
                     <h3 style="margin-bottom: 20px; color: var(--primary); display:flex; align-items:center; gap:10px;">
                         <span>📋</span> 5 Rekomendasi Mapel
                     </h3>
                     <ul id="finalList" style="list-style:none; padding:0;"></ul>
                     <div style="font-size: 0.8rem; color: #64748b; margin-top: 15px; font-style: italic;">
-                        *Disusun berdasarkan Permendikbudristek No. 345/M/2022.
+                        *Rekomendasi ini disusun berdasarkan Permendikbudristek No. 345/M/2022.
                     </div>
                 </div>
 
-                <!-- Kolom Kanan: Meteran Validitas -->
                 <div>
                     <div id="validityBox" class="validity-box">
                         <div class="validity-score" id="validityScoreText">0%</div>
                         <div class="validity-label">Skor Validitas</div>
-                        <div style="font-size: 0.8rem; margin-top: 5px; color: #555;">(Kecocokan Akademik & Minat)</div>
+                        <div style="font-size: 0.8rem; margin-top: 5px; color: #555;">(Kecocokan Akademik, Minat & Fisik)</div>
                     </div>
                     
                     <div class="result-card">
@@ -516,25 +507,30 @@
 <script>
     // --- 1. DATA MASTER JURUSAN & ATURAN SNBP ---
     const majorsData = {
+        'kedinasan': { 
+            name: 'Sekolah Kedinasan (STAN/STIS/IPDN/AKPOL/AKMIL)', 
+            req: ['mtk_lanjut', 'bing_lanjut'], 
+            riasec: ['E', 'C', 'R'] // Enterprising (Leadership), Conventional (Rules), Realistic (Physical)
+        },
         'kedokteran': { name: 'Kedokteran / Dokter Gigi / Veteriner', req: ['biologi', 'kimia'], riasec: ['I', 'S', 'R'] },
-        'kesmas_farmasi': { name: 'Kesehatan Masy. / Farmasi / Gizi / Keperawatan', req: ['biologi', 'kimia'], riasec: ['S', 'I', 'C'] },
-        'teknik_fisika': { name: 'Teknik (Sipil, Mesin, Elektro, Fisika, Penerbangan)', req: ['fisika', 'mtk_lanjut'], riasec: ['R', 'I', 'C'] },
-        'teknik_kimia': { name: 'Teknik Kimia / Lingkungan / Metalurgi', req: ['kimia', 'fisika', 'mtk_lanjut'], riasec: ['I', 'R'] },
-        'informatika': { name: 'Informatika / Ilmu Komputer / Sistem Informasi', req: ['mtk_lanjut', 'informatika'], riasec: ['I', 'C', 'R'] },
-        'mipa_fis': { name: 'MIPA (Matematika / Fisika / Statistika)', req: ['mtk_lanjut', 'fisika'], riasec: ['I', 'C'] },
+        'kesmas_farmasi': { name: 'Kesehatan Masy. / Farmasi / Gizi', req: ['biologi', 'kimia'], riasec: ['S', 'I', 'C'] },
+        'teknik_fisika': { name: 'Teknik (Sipil, Mesin, Elektro, Penerbangan)', req: ['fisika', 'mtk_lanjut'], riasec: ['R', 'I', 'C'] },
+        'teknik_kimia': { name: 'Teknik Kimia / Lingkungan', req: ['kimia', 'fisika', 'mtk_lanjut'], riasec: ['I', 'R'] },
+        'informatika': { name: 'Informatika / Ilmu Komputer', req: ['mtk_lanjut', 'informatika'], riasec: ['I', 'C', 'R'] },
+        'mipa_fis': { name: 'MIPA (Matematika / Fisika)', req: ['mtk_lanjut', 'fisika'], riasec: ['I', 'C'] },
         'mipa_bio': { name: 'MIPA (Biologi / Kimia)', req: ['biologi', 'kimia'], riasec: ['I'] },
-        'pertanian': { name: 'Pertanian / Agroteknologi / Kehutanan', req: ['biologi'], riasec: ['R', 'I', 'E'] },
-        'ekonomi': { name: 'Ekonomi / Pembangunan / Bisnis', req: ['ekonomi', 'mtk_lanjut'], riasec: ['E', 'C', 'S'] },
-        'akuntansi': { name: 'Akuntansi / Manajemen Keuangan', req: ['ekonomi', 'mtk_lanjut'], riasec: ['C', 'E'] },
-        'komunikasi': { name: 'Ilmu Komunikasi / Hubungan Masyarakat / Jurnalistik', req: ['sosiologi', 'bing_lanjut'], riasec: ['A', 'E', 'S'] },
-        'hi_hukum': { name: 'Hukum / Hubungan Internasional / Ilmu Politik', req: ['sosiologi', 'bing_lanjut'], riasec: ['E', 'S', 'I'] },
+        'pertanian': { name: 'Pertanian / Agroteknologi', req: ['biologi'], riasec: ['R', 'I', 'E'] },
+        'ekonomi': { name: 'Ekonomi / Bisnis / Manajemen', req: ['ekonomi', 'mtk_lanjut'], riasec: ['E', 'C', 'S'] },
+        'akuntansi': { name: 'Akuntansi / Keuangan', req: ['ekonomi', 'mtk_lanjut'], riasec: ['C', 'E'] },
+        'komunikasi': { name: 'Ilmu Komunikasi / Hubungan Masyarakat', req: ['sosiologi', 'bing_lanjut'], riasec: ['A', 'E', 'S'] },
+        'hi_hukum': { name: 'Hukum / Hubungan Internasional', req: ['sosiologi', 'bing_lanjut'], riasec: ['E', 'S', 'I'] },
         'psikologi': { name: 'Psikologi', req: ['sosiologi', 'biologi', 'mtk_lanjut'], riasec: ['S', 'I', 'A'] },
-        'sastra': { name: 'Sastra (Inggris/Indonesia/Asing) / Ilmu Budaya', req: ['bing_lanjut', 'sosiologi'], riasec: ['A', 'S', 'I'] },
-        'pendidikan': { name: 'Pendidikan / Keguruan (Semua Mapel)', req: ['sosiologi', 'bing_lanjut'], riasec: ['S', 'A', 'E'] },
-        'dkv': { name: 'Desain Komunikasi Visual / Seni Rupa / Arsitektur', req: ['informatika', 'bing_lanjut'], riasec: ['A', 'R', 'I'] }
+        'sastra': { name: 'Sastra / Ilmu Budaya', req: ['bing_lanjut', 'sosiologi'], riasec: ['A', 'S', 'I'] },
+        'pendidikan': { name: 'Pendidikan / Keguruan', req: ['sosiologi', 'bing_lanjut'], riasec: ['S', 'A', 'E'] },
+        'dkv': { name: 'Desain Komunikasi Visual / Arsitektur', req: ['informatika', 'bing_lanjut'], riasec: ['A', 'R', 'I'] }
     };
 
-    // --- 2. DATABASE MAPEL SEKOLAH ---
+    // --- 2. DATABASE MAPEL ---
     const subjectsDB = [
         { id: 'mtk_lanjut', name: 'Matematika Tkt. Lanjut', riasec: ['I', 'C'], inputKey: 'score_mtk' },
         { id: 'fisika', name: 'Fisika', riasec: ['R', 'I'], inputKey: 'score_fis' },
@@ -548,38 +544,32 @@
         { id: 'sejarah', name: 'Sejarah Tkt. Lanjut', riasec: ['S', 'I', 'A'], inputKey: 'score_sej' }
     ];
 
-    // --- 3. 48 RIASEC QUESTIONS ---
+    // --- 3. PERTANYAAN (RIASEC + KEDINASAN) ---
     const psychQuestions = [
+        // General RIASEC
         { t: 'R', q: 'Memperbaiki alat elektronik/mesin.' }, { t: 'R', q: 'Bekerja fisik di luar ruangan.' },
-        { t: 'R', q: 'Merakit model bangunan/benda.' }, { t: 'R', q: 'Menggunakan perkakas (obeng/palu).' },
-        { t: 'R', q: 'Mengurus tanaman atau hewan.' }, { t: 'R', q: 'Kegiatan olahraga/atletik.' },
-        { t: 'R', q: 'Memahami cara kerja mesin mobil.' }, { t: 'R', q: 'Membuat kerajinan kayu/logam.' },
-        { t: 'I', q: 'Memecahkan soal matematika rumit.' }, { t: 'I', q: 'Melakukan eksperimen sains.' },
-        { t: 'I', q: 'Membaca artikel ilmiah/sains.' }, { t: 'I', q: 'Menganalisis grafik dan data.' },
-        { t: 'I', q: 'Bermain game strategi/logika.' }, { t: 'I', q: 'Belajar tentang alam semesta.' },
-        { t: 'I', q: 'Riset penyebab suatu masalah.' }, { t: 'I', q: 'Meneliti fakta sejarah secara detail.' },
-        { t: 'A', q: 'Menggambar, melukis, desain grafis.' }, { t: 'A', q: 'Menulis cerpen, puisi, atau naskah.' },
-        { t: 'A', q: 'Bermain musik atau bernyanyi.' }, { t: 'A', q: 'Merancang pakaian atau fashion.' },
-        { t: 'A', q: 'Menonton pertunjukan seni/teater.' }, { t: 'A', q: 'Tampil unik dan berbeda dari orang lain.' },
-        { t: 'A', q: 'Membuat konten video/fotografi.' }, { t: 'A', q: 'Mendekorasi ruangan agar estetik.' },
-        { t: 'S', q: 'Mengajar atau membimbing teman.' }, { t: 'S', q: 'Mendengarkan curhat masalah orang lain.' },
-        { t: 'S', q: 'Bekerja dalam tim/kelompok.' }, { t: 'S', q: 'Melakukan kegiatan amal/sosial.' },
-        { t: 'S', q: 'Mempelajari psikologi manusia.' }, { t: 'S', q: 'Merawat orang sakit.' },
-        { t: 'S', q: 'Menengahi pertengkaran teman.' }, { t: 'S', q: 'Bertemu dan ngobrol dengan orang baru.' },
-        { t: 'E', q: 'Berjualan produk atau bisnis.' }, { t: 'E', q: 'Berbicara/pidato di depan umum.' },
-        { t: 'E', q: 'Menjadi pemimpin/ketua organisasi.' }, { t: 'E', q: 'Berdebat atau negosiasi.' },
-        { t: 'E', q: 'Mengelola sebuah acara (event).' }, { t: 'E', q: 'Mempelajari pasar saham/ekonomi.' },
-        { t: 'E', q: 'Mengambil risiko untuk sukses.' }, { t: 'E', q: 'Bercita-cita menjadi manajer/CEO.' },
-        { t: 'C', q: 'Membuat jadwal kegiatan teratur.' }, { t: 'C', q: 'Mengatur keuangan/pembukuan.' },
-        { t: 'C', q: 'Input data ke Excel/Komputer.' }, { t: 'C', q: 'Mengikuti aturan yang jelas.' },
-        { t: 'C', q: 'Menulis kode program (coding) rapi.' }, { t: 'C', q: 'Mengarsipkan dokumen.' },
-        { t: 'C', q: 'Memeriksa detail kesalahan tulisan.' }, { t: 'C', q: 'Mengoleksi barang dengan urutan tertentu.' }
+        { t: 'R', q: 'Merakit model bangunan/benda.' }, { t: 'R', q: 'Menggunakan perkakas.' },
+        { t: 'I', q: 'Memecahkan soal matematika rumit.' }, { t: 'I', q: 'Eksperimen sains di laboratorium.' },
+        { t: 'I', q: 'Membaca artikel ilmiah.' }, { t: 'I', q: 'Analisis data statistik.' },
+        { t: 'A', q: 'Menggambar, melukis, desain.' }, { t: 'A', q: 'Menulis cerita kreatif.' },
+        { t: 'A', q: 'Bermain musik/nyanyi.' }, { t: 'A', q: 'Fotografi atau videografi.' },
+        { t: 'S', q: 'Mengajar teman.' }, { t: 'S', q: 'Mendengarkan curhat.' },
+        { t: 'S', q: 'Kerja kelompok/tim.' }, { t: 'S', q: 'Kegiatan sosial/amal.' },
+        { t: 'E', q: 'Jualan atau bisnis.' }, { t: 'E', q: 'Pidato/Presentasi.' },
+        { t: 'E', q: 'Memimpin organisasi.' }, { t: 'E', q: 'Negosiasi/Debat.' },
+        { t: 'C', q: 'Membuat jadwal teratur.' }, { t: 'C', q: 'Pembukuan keuangan.' },
+        { t: 'C', q: 'Input data komputer.' }, { t: 'C', q: 'Ikuti aturan/prosedur.' }
     ];
 
-    psychQuestions.sort(() => Math.random() - 0.5);
+    // Pertanyaan KHUSUS Kedinasan (Conditional)
+    const kedinasanQuestions = [
+        { t: 'K', q: 'Saya rutin berolahraga (lari, push-up) untuk menjaga kebugaran fisik.' },
+        { t: 'K', q: 'Saya sanggup menjalani kehidupan asrama dengan aturan disiplin ketat semi-militer.' },
+        { t: 'K', q: 'Saya siap ditempatkan di seluruh wilayah Indonesia (termasuk pelosok) setelah lulus.' },
+        { t: 'K', q: 'Saya memiliki tinggi badan dan kesehatan mata (tidak buta warna) yang memadai.' }
+    ];
 
-    // --- STATE ---
-    let userProfile = { major1: '', major2: '', scores: {}, riasecScores: {} };
+    let userProfile = { major1: '', major2: '', scores: {}, riasecScores: {}, kedinasanScore: 0 };
 
     window.onload = function() {
         const sel1 = document.getElementById('targetMajor1');
@@ -592,7 +582,6 @@
         });
     };
 
-    // --- UI FUNCTIONS ---
     function updateProgress(step) {
         document.getElementById('progressBar').style.width = (step / 4) * 100 + '%';
     }
@@ -602,7 +591,7 @@
             const m1 = document.getElementById('targetMajor1').value;
             const m2 = document.getElementById('targetMajor2').value;
             if (!m1 || !m2) { alert("Wajib pilih kedua jurusan!"); return; }
-            if (m1 === m2) { if(!confirm("Jurusan Utama dan Cadangan sama. Yakin?")) return; }
+            if (m1 === m2) { if(!confirm("Jurusan sama. Yakin?")) return; }
             userProfile.major1 = m1; userProfile.major2 = m2;
             renderQuestions();
         }
@@ -616,10 +605,8 @@
             if(!complete) { alert("Mohon lengkapi semua nilai mapel wajib!"); return; }
         }
         
-        // Animasi transisi antar tab
         const currentTab = document.querySelector('.step-content.active');
         const nextTab = document.getElementById(`step${step + 1}`);
-        
         if(currentTab && nextTab) {
             currentTab.classList.remove('active');
             nextTab.classList.add('active');
@@ -631,7 +618,6 @@
     function prevStep(step) {
         const currentTab = document.querySelector('.step-content.active');
         const prevTab = document.getElementById(`step${step - 1}`);
-        
         if(currentTab && prevTab) {
             currentTab.classList.remove('active');
             prevTab.classList.add('active');
@@ -642,52 +628,98 @@
 
     function renderQuestions() {
         const container = document.getElementById('dynamicQuestions');
-        if(container.innerHTML.trim() === '') {
-            psychQuestions.forEach((q, idx) => {
-                container.innerHTML += `
-                    <div class="question-item">
-                        <div style="font-weight:600; margin-bottom:10px;">${idx + 1}. ${q.q}</div>
-                        <div class="likert-scale">
-                            ${[1,2,3,4,5].map(val => `
-                                <label class="likert-option">
-                                    <input type="radio" name="q_${idx}" value="${val}" data-type="${q.t}" required>
-                                    <span class="likert-label">${val}</span>
-                                </label>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
+        container.innerHTML = '';
+        
+        // 1. Render General RIASEC (Shuffled)
+        const generalQs = [...psychQuestions].sort(() => Math.random() - 0.5);
+        
+        generalQs.forEach((q, idx) => {
+            container.innerHTML += createQuestionHTML(idx, q.q, q.t);
+        });
+
+        // 2. Conditional: Jika pilih Kedinasan, tambah pertanyaan khusus
+        if (userProfile.major1 === 'kedinasan' || userProfile.major2 === 'kedinasan') {
+            document.getElementById('kedinasan-badge').style.display = 'inline';
+            container.innerHTML += `<div style="margin: 30px 0 15px 0; border-top: 2px dashed #ccc; padding-top: 20px; text-align:center; font-weight:bold; color: var(--kedinasan);">📋 TES KHUSUS KEDINASAN (Fisik & Mental)</div>`;
+            
+            kedinasanQuestions.forEach((q, idx) => {
+                // Gunakan index lanjutan agar ID unik
+                const realIdx = generalQs.length + idx; 
+                container.innerHTML += createQuestionHTML(realIdx, q.q, q.t, true);
             });
         }
     }
 
-    // --- LOGIC ---
+    function createQuestionHTML(idx, text, type, isSpecial = false) {
+        const specialClass = isSpecial ? 'kedinasan-card' : '';
+        return `
+            <div class="question-item ${specialClass}">
+                <div style="font-weight:600; margin-bottom:10px;">${text}</div>
+                <div class="likert-scale">
+                    ${[1,2,3,4,5].map(val => `
+                        <label class="likert-option">
+                            <input type="radio" name="q_${idx}" value="${val}" data-type="${type}" required>
+                            <span class="likert-label">${val}</span>
+                        </label>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
     function calculateResult() {
+        // Collect Inputs
         const inputs = document.querySelectorAll('#step3 input:checked');
-        if (inputs.length < psychQuestions.length) { alert("Mohon jawab semua 48 soal!"); return; }
+        
+        // Count total questions needed
+        let totalNeeded = psychQuestions.length;
+        if (userProfile.major1 === 'kedinasan' || userProfile.major2 === 'kedinasan') {
+            totalNeeded += kedinasanQuestions.length;
+        }
+
+        if (inputs.length < totalNeeded) { alert("Mohon jawab semua pertanyaan!"); return; }
 
         userProfile.riasecScores = { R:0, I:0, A:0, S:0, E:0, C:0 };
+        userProfile.kedinasanScore = 0; // Reset
+
         inputs.forEach(inp => {
-            userProfile.riasecScores[inp.getAttribute('data-type')] += parseInt(inp.value);
+            const type = inp.getAttribute('data-type');
+            const val = parseInt(inp.value);
+            
+            if (type === 'K') {
+                userProfile.kedinasanScore += val;
+            } else {
+                userProfile.riasecScores[type] += val;
+            }
         });
 
-        const normalize = (s) => (s / 40) * 100;
+        const normalize = (s, maxItems) => (s / (maxItems * 5)) * 100;
+        // Normalisasi RIASEC (tiap tipe ada sekitar 4 soal di contoh ini, sesuaikan realnya)
+        // Di sini saya pakai simple avg logic di mapel scoring.
 
+        // Subject Scoring
         subjectsDB.forEach(sub => {
             let academic = userProfile.scores[sub.inputKey] || 0;
             let interestRaw = 0;
+            
+            // Mapel Scoring based on RIASEC
             sub.riasec.forEach(type => { interestRaw += userProfile.riasecScores[type]; });
-            let interestAvg = normalize(interestRaw / sub.riasec.length);
+            
+            // Avg Interest (assuming approx 4 questions per type in random pool)
+            let itemsPerType = 4; // Estimasi dari array psychQuestions (24 total / 6 tipe)
+            let interestAvg = (interestRaw / (sub.riasec.length * itemsPerType * 5)) * 100;
+            if(interestAvg > 100) interestAvg = 100;
 
             sub.finalScore = (academic * 0.4) + (interestAvg * 0.6);
             sub.interestScore = interestAvg;
             sub.academicScore = academic;
         });
 
-        const major1Data = majorsData[userProfile.major1];
-        const major2Data = majorsData[userProfile.major2];
-        const req1 = major1Data.req;
-        const req2 = major2Data.req;
+        // Prioritas Mapel
+        const m1Data = majorsData[userProfile.major1];
+        const m2Data = majorsData[userProfile.major2];
+        const req1 = m1Data.req;
+        const req2 = m2Data.req;
         
         let finalSelection = [];
         let remainingSubjects = [];
@@ -716,33 +748,46 @@
         if (slotsNeeded > 0) finalSelection = finalSelection.concat(remainingSubjects.slice(0, slotsNeeded));
         finalSelection.sort((a, b) => a.priority - b.priority);
 
-        const validityResult = calculateDiagnosticValidity(major1Data);
-
+        const validityResult = calculateDiagnosticValidity(m1Data);
         displayResults(finalSelection, validityResult);
         nextStep(3);
     }
 
     function calculateDiagnosticValidity(m1Data) {
+        // A. Psych Match (RIASEC)
         const userScores = userProfile.riasecScores;
         const expectedTraits = m1Data.riasec;
         let traitMatch = 0;
-        let maxTraitMatch = expectedTraits.length * 40; 
+        let itemsPerType = 4;
+        let maxTraitMatch = expectedTraits.length * itemsPerType * 5; 
+        
         expectedTraits.forEach(t => { traitMatch += userScores[t]; });
         let psychScore = (traitMatch / maxTraitMatch) * 100;
 
+        // B. Academic Check
         let academicPenalties = 0;
         let lowGradeSubjects = [];
-        
         m1Data.req.forEach(reqId => {
             const subj = subjectsDB.find(s => s.id === reqId);
             const grade = userProfile.scores[subj.inputKey];
-            if (grade < 75) {
-                academicPenalties += 20; 
-                lowGradeSubjects.push(subj.name);
-            }
+            if (grade < 75) { academicPenalties += 15; lowGradeSubjects.push(subj.name); }
         });
 
-        let finalVal = Math.round(psychScore - academicPenalties);
+        // C. Kedinasan Special Check
+        let kedinasanPenalty = 0;
+        let kedinasanMsg = "";
+        if (userProfile.major1 === 'kedinasan') {
+            // Max score kedinasan = 4 soal * 5 = 20
+            const kScore = userProfile.kedinasanScore;
+            const kPercent = (kScore / 20) * 100;
+            
+            if (kPercent < 70) {
+                kedinasanPenalty = 40; // Penalty besar jika fisik/disiplin rendah
+                kedinasanMsg = "Skor kesiapan fisik/mental kedinasan rendah.";
+            }
+        }
+
+        let finalVal = Math.round(psychScore - academicPenalties - kedinasanPenalty);
         if (finalVal < 0) finalVal = 0;
         if (finalVal > 100) finalVal = 100;
 
@@ -750,7 +795,8 @@
             score: finalVal,
             psychScore: psychScore,
             academicPenalties: academicPenalties,
-            lowSubjects: lowGradeSubjects
+            lowSubjects: lowGradeSubjects,
+            kedinasanMsg: kedinasanMsg
         };
     }
 
@@ -792,12 +838,12 @@
         let msg = '';
         const m1Name = majorsData[userProfile.major1].name;
 
-        if (diagnosis.score >= 80) {
+        if (diagnosis.kedinasanMsg) {
+            msg = `⛔ <b>Peringatan Kedinasan:</b><br>${diagnosis.kedinasanMsg} Sekolah kedinasan menuntut fisik prima dan disiplin tinggi. Pertimbangkan kembali jika kamu merasa berat di area ini.`;
+        } else if (diagnosis.score >= 80) {
             msg = `✅ <b>Kondisi Ideal:</b><br>Profil kepribadianmu (${top3}) dan nilai akademikmu sangat selaras dengan tuntutan jurusan <b>${m1Name}</b>.`;
         } else if (diagnosis.psychScore >= 70 && diagnosis.academicPenalties > 0) {
             msg = `⚠️ <b>Minat Tinggi, Nilai Perlu Didorong:</b><br>Kepribadianmu COCOK, tapi nilai mapel wajib (${diagnosis.lowSubjects.join(", ")}) masih di bawah standar.`;
-        } else if (diagnosis.psychScore < 60 && diagnosis.academicPenalties === 0) {
-            msg = `⚠️ <b>Mampu tapi Risiko Bosan:</b><br>Nilai akademikmu masuk, tapi profil kepribadianmu (${top3}) kurang cocok dengan karakter jurusan ini.`;
         } else {
             msg = `⛔ <b>Mismatch (Risiko Tinggi):</b><br>Baik nilai maupun minat tampaknya kurang sesuai untuk jurusan <b>${m1Name}</b> saat ini.`;
         }
