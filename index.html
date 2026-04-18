@@ -155,13 +155,43 @@
         .badge-mandatory { background: #fee2e2; color: #b91c1c; }
         .badge-supporting { background: #dbeafe; color: #1d4ed8; }
 
-        .psych-insight { background: #fffbeb; border-left: 5px solid var(--warning); padding: 20px; border-radius: 8px; margin-top: 25px; font-size: 0.95rem; line-height: 1.7; }
+        .psych-insight { background: #fff; border: 1px solid #e2e8f0; border-left: 5px solid var(--primary); padding: 25px; border-radius: 8px; margin-top: 25px; font-size: 0.95rem; line-height: 1.7; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .diagnosis-section { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #e2e8f0; }
+        .diagnosis-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .diagnosis-title { font-weight: 700; color: var(--text-main); margin-bottom: 5px; font-size: 1.05rem; }
 
         .validity-box { text-align: center; padding: 30px; border-radius: 16px; border: 2px solid #e2e8f0; margin-bottom: 20px; background: #fff; transition: all 0.5s ease; }
         .validity-score { font-size: 3.5rem; font-weight: 900; line-height: 1; margin-bottom: 5px; }
         .validity-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; color: var(--text-sub); }
 
         footer { text-align: center; padding: 20px; color: var(--text-sub); font-size: 0.9rem; border-top: 1px solid #e2e8f0; background: #f1f5f9; margin-top: auto; }
+
+        /* --- CSS KHUSUS PRINT & DOWNLOAD PDF --- */
+        @media print {
+            body { background: white; padding: 0; margin: 0; color: black; }
+            .container { box-shadow: none; border-radius: 0; padding: 0; max-width: 100%; margin: 0; }
+            
+            /* Sembunyikan elemen UI yang tidak perlu di kertas */
+            header, .progress-container, .btn-group { display: none !important; }
+            .step-content { display: none !important; padding: 0; }
+            #step4.active { display: block !important; }
+            
+            /* Paksa browser mencetak warna background */
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+            
+            /* Rapikan Grid agar tidak terpotong */
+            .result-grid { grid-template-columns: 1fr; gap: 15px; }
+            .result-card { page-break-inside: avoid; border: 1px solid #cbd5e1; margin-bottom: 15px; box-shadow: none; }
+            .mapel-item { border: 1px solid #e2e8f0; background: #f8fafc; }
+            .validity-box { border: 2px solid #e2e8f0; background: #fff; page-break-inside: avoid; }
+            .psych-insight { page-break-inside: avoid; border: 1px solid #fde68a; }
+            
+            /* Posisi Footer Resmi di bawah */
+            footer { position: relative; border-top: 1px dashed #cbd5e1; background: white; margin-top: 30px; }
+        }
+        
+        /* Styling Banner SVG */
+        .report-header-svg { width: 100%; height: auto; max-height: 180px; border-radius: 16px; margin-bottom: 25px; display: block; box-shadow: 0 4px 15px rgba(37,99,235,0.15); }
     </style>
 </head>
 <body>
@@ -294,7 +324,35 @@
 
         <!-- STEP 4: Hasil -->
         <div class="step-content" id="step4">
-            <h2 style="text-align: center; border:none; margin-bottom:20px;">Laporan Analisis Studi</h2>
+            
+            <!-- HEADER SVG UNTUK LAPORAN (Tampil di Web & PDF) -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 180" class="report-header-svg">
+                <defs>
+                    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#1e40af" />
+                        <stop offset="100%" stop-color="#3b82f6" />
+                    </linearGradient>
+                    <pattern id="pattern-dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <circle cx="2" cy="2" r="1.5" fill="rgba(255,255,255,0.15)"></circle>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#bg-grad)" rx="16"></rect>
+                <rect width="100%" height="100%" fill="url(#pattern-dots)" rx="16"></rect>
+                
+                <!-- Grafik Dekoratif (Shield/Tameng Validitas) -->
+                <g transform="translate(40, 40)">
+                    <circle cx="50" cy="50" r="45" fill="rgba(255,255,255,0.2)"></circle>
+                    <path d="M50 15 L80 25 V55 C80 75 65 90 50 95 C35 90 20 75 20 55 V25 Z" fill="rgba(255,255,255,0.95)" />
+                    <path d="M40 55 L48 65 L65 40" fill="none" stroke="#1e40af" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                </g>
+                
+                <!-- Teks Sertifikat -->
+                <text x="170" y="70" fill="white" font-family="system-ui, sans-serif" font-size="30" font-weight="800">Sertifikat Analisis Studi</text>
+                <text x="170" y="105" fill="rgba(255,255,255,0.9)" font-family="system-ui, sans-serif" font-size="16">Rekomendasi Mapel Pilihan &amp; Validitas Psikometrik</text>
+                <text x="170" y="135" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="14" id="reportDate">Dicetak pada: -</text>
+            </svg>
+
+            <h2 style="display:none;">Laporan Analisis Studi</h2>
 
             <div class="result-grid">
                 <div class="result-card">
@@ -343,19 +401,29 @@
         'kedokteran': { name: 'Kedokteran / Dokter Gigi / Veteriner', req: ['biologi', 'kimia'], riasec: ['I', 'S', 'R'] },
         'kesmas_farmasi': { name: 'Kesehatan Masy. / Farmasi / Gizi', req: ['biologi', 'kimia'], riasec: ['S', 'I', 'C'] },
         'teknik_fisika': { name: 'Teknik (Sipil, Mesin, Elektro, Penerbangan)', req: ['fisika', 'mtk_lanjut'], riasec: ['R', 'I', 'C'] },
-        'teknik_kimia': { name: 'Teknik Kimia / Lingkungan', req: ['kimia', 'fisika', 'mtk_lanjut'], riasec: ['I', 'R'] },
-        'informatika': { name: 'Informatika / Ilmu Komputer', req: ['mtk_lanjut', 'informatika'], riasec: ['I', 'C', 'R'] },
+        'teknik_kimia': { name: 'Teknik Kimia / Lingkungan / Material', req: ['kimia', 'fisika', 'mtk_lanjut'], riasec: ['I', 'R'] },
+        'arsitektur_pwk': { name: 'Arsitektur / Perencanaan Wilayah Kota (PWK)', req: ['mtk_lanjut', 'fisika'], riasec: ['R', 'A', 'I'] },
+        'informatika': { name: 'Informatika / Ilmu Komputer / Sistem Informasi', req: ['mtk_lanjut', 'informatika'], riasec: ['I', 'C', 'R'] },
         'mipa_fis': { name: 'MIPA (Matematika / Fisika)', req: ['mtk_lanjut', 'fisika'], riasec: ['I', 'C'] },
         'mipa_bio': { name: 'MIPA (Biologi / Kimia)', req: ['biologi', 'kimia'], riasec: ['I'] },
-        'pertanian': { name: 'Pertanian / Agroteknologi', req: ['biologi'], riasec: ['R', 'I', 'E'] },
-        'ekonomi': { name: 'Ekonomi / Bisnis / Manajemen', req: ['ekonomi', 'mtk_lanjut'], riasec: ['E', 'C', 'S'] },
-        'akuntansi': { name: 'Akuntansi / Keuangan', req: ['ekonomi', 'mtk_lanjut'], riasec: ['C', 'E'] },
+        'aktuaria_stat': { name: 'Aktuaria / Statistika / Data Science', req: ['mtk_lanjut', 'informatika'], riasec: ['I', 'C', 'E'] },
+        'pertanian': { name: 'Pertanian / Kehutanan / Agribisnis', req: ['biologi', 'kimia'], riasec: ['R', 'I', 'E'] },
+        'peternakan_kelautan': { name: 'Peternakan / Ilmu Kelautan / Perikanan', req: ['biologi', 'kimia'], riasec: ['R', 'I'] },
+        'ekonomi': { name: 'Ilmu Ekonomi / Pembangunan / Bisnis', req: ['ekonomi', 'mtk_lanjut'], riasec: ['E', 'C', 'S'] },
+        'akuntansi': { name: 'Akuntansi / Manajemen Keuangan', req: ['ekonomi', 'mtk_lanjut'], riasec: ['C', 'E'] },
+        'administrasi': { name: 'Ilmu Administrasi (Negara/Publik/Bisnis)', req: ['sosiologi', 'ekonomi'], riasec: ['C', 'E', 'S'] },
         'komunikasi': { name: 'Ilmu Komunikasi / Hubungan Masyarakat', req: ['sosiologi', 'bing_lanjut'], riasec: ['A', 'E', 'S'] },
         'hi_hukum': { name: 'Hukum / Hubungan Internasional', req: ['sosiologi', 'bing_lanjut'], riasec: ['E', 'S', 'I'] },
+        'pemerintahan_politik': { name: 'Ilmu Pemerintahan / Ilmu Politik', req: ['sosiologi', 'sejarah'], riasec: ['E', 'S', 'I'] },
+        'sosiologi_antro': { name: 'Sosiologi / Antropologi / Kriminologi', req: ['sosiologi', 'sejarah'], riasec: ['I', 'S'] },
         'psikologi': { name: 'Psikologi', req: ['sosiologi', 'biologi', 'mtk_lanjut'], riasec: ['S', 'I', 'A'] },
-        'sastra': { name: 'Sastra / Ilmu Budaya', req: ['bing_lanjut', 'sosiologi'], riasec: ['A', 'S', 'I'] },
+        'sastra': { name: 'Sastra / Bahasa / Ilmu Budaya', req: ['bing_lanjut', 'sosiologi'], riasec: ['A', 'S', 'I'] },
+        'filsafat_agama': { name: 'Filsafat / Ilmu Agama / Teologi', req: ['sosiologi', 'sejarah'], riasec: ['I', 'S', 'A'] },
         'pendidikan': { name: 'Pendidikan / Keguruan', req: ['sosiologi', 'bing_lanjut'], riasec: ['S', 'A', 'E'] },
-        'dkv': { name: 'Desain Komunikasi Visual / Arsitektur', req: ['informatika', 'bing_lanjut'], riasec: ['A', 'R', 'I'] }
+        'dkv': { name: 'Desain Komunikasi Visual (DKV) / Seni Rupa', req: ['informatika', 'bing_lanjut'], riasec: ['A', 'R', 'I'] },
+        'seni_pertunjukan': { name: 'Seni Pertunjukan (Musik/Tari/Teater)', req: ['bing_lanjut', 'sejarah'], riasec: ['A', 'S', 'E'] },
+        'pariwisata': { name: 'Pariwisata / Perhotelan / Tata Boga', req: ['bing_lanjut', 'geografi'], riasec: ['E', 'S', 'C'] },
+        'keolahragaan': { name: 'Ilmu Keolahragaan / PJKR', req: ['biologi', 'sosiologi'], riasec: ['R', 'S', 'E'] }
     };
 
     // --- 2. DATABASE MAPEL ---
@@ -701,21 +769,82 @@
         const top3 = traits.slice(0, 3).join("-");
         document.getElementById('riasecScores').innerText = `Kode: ${top3}`;
 
-        const analysisDiv = document.getElementById('finalPsychAnalysis');
-        let msg = '';
-        const m1Name = majorsData[userProfile.major1].name;
+        // Sisipkan Tanggal Cetak ke dalam SVG
+        const dateStr = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('reportDate').textContent = `Dokumen dicetak pada: ${dateStr}`;
 
+        const analysisDiv = document.getElementById('finalPsychAnalysis');
+        const m1Data = majorsData[userProfile.major1];
+        const m1Name = m1Data.name;
+        
+        // Ambil nama mapel syarat untuk ditampilkan di diagnosa
+        const req1Names = m1Data.req.map(id => subjectsDB.find(s => s.id === id).name).join(" dan ");
+
+        // 1. Diagnosa Kedinasan (Jika Ada)
+        let kedinasanAlert = "";
         if (diagnosis.kedinasanMsg) {
-            msg = `⛔ <b>Peringatan Kedinasan:</b><br>${diagnosis.kedinasanMsg} Sekolah kedinasan menuntut fisik prima dan disiplin tinggi. Pertimbangkan kembali jika kamu merasa berat di area ini.`;
-        } else if (diagnosis.score >= 80) {
-            msg = `✅ <b>Kondisi Ideal:</b><br>Profil kepribadianmu (${top3}) dan nilai akademikmu sangat selaras dengan tuntutan jurusan <b>${m1Name}</b>.`;
-        } else if (diagnosis.psychScore >= 70 && diagnosis.academicPenalties > 0) {
-            msg = `⚠️ <b>Minat Tinggi, Nilai Perlu Didorong:</b><br>Kepribadianmu COCOK, tapi nilai mapel wajib (${diagnosis.lowSubjects.join(", ")}) masih di bawah standar.`;
-        } else {
-            msg = `⛔ <b>Mismatch (Risiko Tinggi):</b><br>Baik nilai maupun minat tampaknya kurang sesuai untuk jurusan <b>${m1Name}</b> saat ini.`;
+            kedinasanAlert = `
+                <div class="diagnosis-section" style="background:#fee2e2; padding:15px; border-radius:8px; border:1px solid #f87171;">
+                    <div class="diagnosis-title" style="color:#b91c1c;">🚨 Peringatan Syarat Kedinasan</div>
+                    <span style="color:#991b1b;">${diagnosis.kedinasanMsg} Sekolah kedinasan menuntut syarat fisik prima dan toleransi kedisiplinan tinggi. Mohon pertimbangkan kembali kesiapan fisik dan mentalmu.</span>
+                </div>`;
         }
 
-        analysisDiv.innerHTML = `<strong>Diagnosa Ahli:</strong><br>${msg}`;
+        // 2. Diagnosa Akademik
+        let academicText = "";
+        if (diagnosis.academicPenalties === 0) {
+            academicText = `✅ <b>Aman (Memenuhi Standar):</b> Nilai rapor pada mata pelajaran prasyarat wajib untuk jurusan ini (<b>${req1Names}</b>) terpantau stabil (≥75). Ini adalah modal yang sangat baik untuk lolos tahap administrasi SNBP.`;
+        } else {
+            academicText = `⚠️ <b>Kritis (Perlu Peningkatan):</b> Nilai rapormu pada mata pelajaran wajib jurusan (<b>${diagnosis.lowSubjects.join(", ")}</b>) saat ini berada di bawah standar aman (<75). Jika tidak segera ditingkatkan di Kelas 11, peluang lolos SNBP akan sangat berisiko.`;
+        }
+
+        // 3. Diagnosa Psikometrik
+        let psychText = "";
+        if (diagnosis.psychScore >= 80) {
+            psychText = `✅ <b>Sangat Selaras:</b> Profil kepribadian bawaanmu (<b>${top3}</b>) sangat cocok dengan iklim dan tugas-tugas di jurusan <b>${m1Name}</b>. Potensi kamu untuk *enjoy* berkuliah tanpa beban mental (burnout) sangat tinggi.`;
+        } else if (diagnosis.psychScore >= 50) {
+            psychText = `⚠️ <b>Cukup Selaras:</b> Ada kecocokan menengah antara minatmu dan jurusan ini. Kamu bisa mengikutinya, namun mungkin membutuhkan tenaga ekstra atau adaptasi mental pada beberapa mata kuliah tertentu.`;
+        } else {
+            psychText = `⛔ <b>Kurang Selaras (Risiko Burnout):</b> Karakter kepribadianmu (<b>${top3}</b>) terdeteksi bertolak belakang dengan sifat asli jurusan <b>${m1Name}</b>. Terdapat risiko tinggi merasa "salah jurusan" di pertengahan semester.`;
+        }
+
+        // 4. Action Plan / Saran
+        let actionText = "";
+        if (diagnosis.score >= 80) {
+            actionText = "<b>Pertahankan prestasimu!</b> Pastikan kamu memilih mapel berlabel 'Wajib' di atas pada Kelas 11. Mulailah membangun portofolio atau prestasi luar kelas yang mendukung jurusan ini.";
+        } else if (diagnosis.score >= 60) {
+            actionText = "<b>Fokus pada kelemahan.</b> Tingkatkan jam belajarmu secara drastis pada mata pelajaran prasyarat yang nilainya masih rendah. Pastikan motivasimu masuk jurusan ini bukan sekadar ikut-ikutan teman.";
+        } else {
+            actionText = "<b>Evaluasi ulang rencana studimu.</b> Sangat disarankan untuk berdiskusi dengan Guru BK/Konselor serta Orang Tua untuk mencari opsi jurusan lain (Plan C) yang lebih sesuai dengan minat murnimu.";
+        }
+
+        // Susun HTML Diagnosa Akhir
+        analysisDiv.innerHTML = `
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary); margin-bottom: 20px; border-bottom: 2px solid var(--primary); display: inline-block; padding-bottom: 5px;">
+                Rincian Diagnosa Kelayakan
+            </div>
+            
+            ${kedinasanAlert}
+
+            <div class="diagnosis-section">
+                <div class="diagnosis-title">1. Evaluasi Akademik (Aturan SNBP)</div>
+                ${academicText}
+            </div>
+
+            <div class="diagnosis-section">
+                <div class="diagnosis-title">2. Evaluasi Psikometrik (Kenyamanan Belajar)</div>
+                ${psychText}
+            </div>
+
+            <div class="diagnosis-section" style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid var(--success);">
+                <div class="diagnosis-title">💡 Rencana Tindakan (Action Plan)</div>
+                ${actionText}
+            </div>
+
+            <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 20px; text-align: justify; font-style: italic;">
+                *Disclaimer: Tingkat Kevalidan (Skor %) dihitung secara proporsional dari ketuntasan nilai mata pelajaran prasyarat dan tingkat persentase kecocokan profil kepribadian RIASEC. Keputusan akhir tetap berada di tangan siswa dan orang tua berdasarkan diskusi dengan konselor sekolah.
+            </div>
+        `;
     }
 </script>
 
