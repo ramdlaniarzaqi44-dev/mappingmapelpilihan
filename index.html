@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navigator Mapel Pilihan Universitas & Kedinasan</title>
+    <title>Navigator Penjurusan & Evaluasi SNBP (SARI AI)</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -12,128 +12,98 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --kedinasan: #4f46e5;
+            --ai-color: #8b5cf6;
             --background: #f8fafc;
             --card: #ffffff;
             --text-main: #0f172a;
             --text-sub: #475569;
             --radius: 12px;
-            --shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.02);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body { background-color: var(--background); color: var(--text-main); line-height: 1.6; padding: 20px; font-size: 16px; }
-
-        .container { max-width: 1050px; margin: 0 auto; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; min-height: 90vh; position: relative; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--background); color: var(--text-main); line-height: 1.6; padding: 20px; font-size: 14px; }
+        .container { max-width: 1100px; margin: 0 auto; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; min-height: 90vh; }
 
         /* HEADER */
-        header { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; padding: 35px 20px; text-align: center; position: relative; overflow: hidden; }
-        header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); animation: rotate 25s linear infinite; }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        header h1 { font-size: clamp(1.5rem, 4vw, 2.2rem); margin-bottom: 8px; font-weight: 800; position: relative; }
-        header p { opacity: 0.95; font-size: clamp(0.9rem, 3vw, 1.1rem); max-width: 650px; margin: 0 auto; position: relative; }
+        header { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; padding: 30px 20px; text-align: center; }
+        header h1 { font-size: 1.8rem; margin-bottom: 5px; font-weight: 800; }
+        header p { opacity: 0.95; font-size: 1rem; max-width: 700px; margin: 0 auto; }
 
-        /* PROGRESS BAR */
         .progress-container { background: #e2e8f0; height: 6px; width: 100%; }
-        .progress-bar { height: 100%; background: var(--success); width: 0%; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .progress-bar { height: 100%; background: var(--success); width: 0%; transition: width 0.5s ease; }
 
-        /* SECTIONS */
-        .step-content { padding: 40px; display: none; flex-grow: 1; }
+        .step-content { padding: 30px; display: none; }
         .step-content.active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h2 { color: var(--primary); margin-bottom: 25px; font-size: clamp(1.3rem, 3vw, 1.8rem); border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
+        h2 { color: var(--primary); margin-bottom: 20px; font-size: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        .section-title { font-size: 1.1rem; color: var(--primary-dark); margin: 25px 0 15px; font-weight: 700; background: #eff6ff; padding: 10px 15px; border-radius: 8px; border-left: 4px solid var(--primary); }
 
-        /* FORMS */
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
-        select, input[type="number"] { width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1rem; transition: all 0.2s; background: #f8fafc; outline: none; }
-        select:focus, input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        /* FORM GRIDS */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; }
+        select { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.95rem; background: #f8fafc; }
+        select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        optgroup { font-weight: bold; color: var(--primary-dark); }
 
-        .input-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .result-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+        /* TABLE-LIKE GRID FOR GRADES */
+        .grade-wrapper { overflow-x: auto; }
+        .grade-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; min-width: 600px; }
+        .grade-table th { text-align: left; padding: 12px 10px; background: #f1f5f9; font-size: 0.9rem; color: #475569; border-bottom: 2px solid #cbd5e1; }
+        .grade-table td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
+        .grade-table input[type="number"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-size: 0.95rem; transition: 0.2s; }
+        .grade-table input[type="number"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); outline: none; background: #fff; }
+        .tka-row input:not(:placeholder-shown) { background: #f0fdf4; border-color: var(--success); font-weight: bold; color: #166534; }
 
-        /* LIKERT SCALE */
-        .scale-legend { display: flex; justify-content: space-between; background: #f1f5f9; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.8rem; position: sticky; top: 0; z-index: 10; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        /* RIASEC SCALE */
+        .scale-legend { display: flex; justify-content: space-between; background: #f8fafc; padding: 10px; border-radius: 8px; position: sticky; top: 0; z-index: 10; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 15px; }
         .scale-item { text-align: center; flex: 1; }
-        .scale-num { font-weight: bold; font-size: 1.2rem; color: var(--primary); display: block; }
-        .scale-desc { display: block; font-size: 0.7rem; color: #475569; margin-top: 2px; }
-
-        .question-item { background: #fff; padding: 25px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #e2e8f0; transition: transform 0.2s; }
-        .question-item:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .question-item.kedinasan-card { border-left: 5px solid var(--kedinasan); background: #f5f3ff; }
+        .scale-num { font-weight: bold; font-size: 1.1rem; color: var(--primary); display: block; }
+        .scale-desc { font-size: 0.7rem; color: #475569; }
         
+        .question-item { background: #fff; padding: 20px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
         .likert-scale { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; }
-        .likert-option { display: flex; flex-direction: column; align-items: center; cursor: pointer; flex: 1; position: relative; }
-        .likert-option input { margin-bottom: 8px; cursor: pointer; accent-color: var(--primary); width: 22px; height: 22px; }
-        .likert-label { font-size: 0.75rem; color: #64748b; text-align: center; font-weight: 500; }
-
-        .scroll-area { max-height: 60vh; overflow-y: auto; padding: 10px 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; }
+        .likert-option { display: flex; flex-direction: column; align-items: center; cursor: pointer; flex: 1; }
+        .likert-option input { margin-bottom: 5px; width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
 
         /* BUTTONS */
-        .btn-group { margin-top: 35px; display: flex; justify-content: space-between; gap: 15px; }
-        button { padding: 15px 30px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; flex: 1; max-width: 250px; }
-        .btn-next { background: var(--primary); color: white; margin-left: auto; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); }
-        .btn-next:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-group { margin-top: 30px; display: flex; justify-content: space-between; gap: 15px; }
+        button { padding: 14px 25px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; flex: 1; transition: 0.2s; }
+        .btn-next { background: var(--primary); color: white; }
+        .btn-next:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
         .btn-prev { background: var(--secondary); color: white; max-width: 150px; }
-        .btn-prev:hover { background: #475569; }
 
-        /* RESULTS UI */
-        .result-card { background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 12px; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .mapel-item { background: #f8fafc; padding: 18px; margin-bottom: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid #cbd5e1; transition: all 0.2s; }
-        .mapel-item:hover { transform: translateX(5px); background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-
-        .badge { padding: 6px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; margin-left: 15px; letter-spacing: 0.5px; }
-        .badge-both { background: #fce7f3; color: #be185d; border: 1px solid #fbcfe8; }
-        .badge-mandatory { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-        .badge-supporting { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
-
-        .validity-box { text-align: center; padding: 30px; border-radius: 16px; border: 2px solid #e2e8f0; margin-bottom: 20px; background: #fff; transition: all 0.3s ease; }
-        .validity-score { font-size: 3.8rem; font-weight: 900; line-height: 1; margin-bottom: 5px; }
-        .validity-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; color: var(--text-sub); }
-
-        .diagnosis-container { background: #fff; border: 1px solid #e2e8f0; padding: 30px; border-radius: 12px; margin-top: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
-        .diagnosis-section { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed #e2e8f0; }
-        .diagnosis-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .diagnosis-title { font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: 1.05rem; }
-
-        footer { text-align: center; padding: 25px; color: var(--text-sub); font-size: 0.95rem; border-top: 1px solid #e2e8f0; background: #f8fafc; margin-top: auto; font-weight: 500; }
-
-        .report-header-svg { display: none; width: 100%; height: auto; max-height: 180px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(37,99,235,0.15); }
-
-        /* RESPONSIVE */
+        /* SARI AI REPORT */
+        .report-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .sari-header { background: linear-gradient(135deg, var(--ai-color), #6d28d9); color: white; padding: 25px; border-radius: 12px; display: flex; align-items: center; gap: 20px; margin-bottom: 20px; position: relative; overflow: hidden; }
+        .sari-header::after { content: ''; position: absolute; right: -20px; top: -20px; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%; }
+        .sari-avatar { width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 2px solid rgba(255,255,255,0.4); }
+        
+        .sari-box { background: #faf5ff; border: 1px solid #e9d5ff; padding: 25px; border-radius: 12px; margin-bottom: 20px; }
+        .mapel-card { background: white; border: 1px solid #e2e8f0; padding: 15px; margin-bottom: 10px; border-radius: 8px; border-left: 5px solid var(--primary); display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .mapel-card:hover { transform: translateX(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        
+        .validity-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); line-height: 1; text-align: center; margin: 10px 0; }
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+        
+        footer { text-align: center; padding: 20px; font-size: 0.9rem; color: #64748b; border-top: 1px solid #e2e8f0; background: #f8fafc; margin-top: auto; }
+        
         @media (max-width: 768px) {
-            .step-content { padding: 20px; }
-            .input-grid { grid-template-columns: 1fr; gap: 15px; }
-            .result-grid { grid-template-columns: 1fr; }
+            .grid-2, .report-grid { grid-template-columns: 1fr; }
             .btn-group { flex-direction: column-reverse; }
-            button { max-width: 100%; width: 100%; padding: 18px; }
-            .mapel-item { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .badge { margin-left: 0; }
-            .scale-legend { flex-wrap: wrap; gap: 10px; }
-            .scale-item { min-width: 30%; }
+            .btn-prev { max-width: 100%; }
         }
 
-        /* PRINT CSS */
         @media print {
-            body { background: white; padding: 0; margin: 0; color: black; }
-            .container { box-shadow: none; border-radius: 0; padding: 0; max-width: 100%; margin: 0; }
-            header, .progress-container, .btn-group { display: none !important; }
+            body { background: white; padding: 0; margin: 0; }
+            .container { box-shadow: none; border: none; max-width: 100%; }
+            header, .progress-container, .btn-group, .hide-on-print { display: none !important; }
             .step-content { display: none !important; padding: 0; }
             #step4.active { display: block !important; }
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-            .result-grid { grid-template-columns: 1fr; gap: 20px; }
-            .result-card, .validity-box, .diagnosis-container { page-break-inside: avoid; border: 1px solid #cbd5e1; margin-bottom: 15px; box-shadow: none; }
-            .report-header-svg { display: block !important; }
-            .hide-on-print { display: none !important; }
-            footer { position: relative; border-top: 1px dashed #cbd5e1; background: white; margin-top: 30px; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .report-grid { grid-template-columns: 1fr; gap: 15px; }
+            .sari-box, .mapel-card { border: 1px solid #cbd5e1; page-break-inside: avoid; }
         }
     </style>
 </head>
@@ -141,577 +111,559 @@
 
 <div class="container">
     <header>
-        <h1>Navigator Mapel & Kedinasan</h1>
-        <p>Sistem Analisis Validitas Tinggi Berdasarkan Aturan SNBP & Profil Psikometrik RIASEC</p>
+        <h1>Navigator Penjurusan & SNBP</h1>
+        <p>Analisis Nilai Rapor (Kurikulum Merdeka) & Psikometrik Bersama SARI</p>
     </header>
-    
-    <div class="progress-container">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
+    <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
 
     <form id="mainForm" onsubmit="event.preventDefault();">
         
-        <!-- STEP 1: PILIH JURUSAN -->
+        <!-- STEP 1: JURUSAN -->
         <div class="step-content active" id="step1">
-            <h2>Langkah 1: Tentukan Target Studi</h2>
-            <p style="margin-bottom: 20px; color: var(--text-sub);">Pilih 2 program studi (Prioritas Utama dan Cadangan) dari rumpun yang tersedia.</p>
+            <h2>Langkah 1: Target Program Studi</h2>
+            <p style="color:var(--text-sub); margin-bottom:20px;">Sistem mencakup ratusan program studi dari Rumpun Kesehatan, Teknik, MIPA, Soshum, Keguruan, hingga PTKIN sesuai regulasi TKA terbaru.</p>
             
-            <div class="input-grid">
-                <div class="form-group" style="background: #eff6ff; padding: 25px; border-radius: 12px; border: 1px solid #bfdbfe;">
-                    <label style="color: #1e40af;">🎯 Pilihan 1 (Prioritas Utama):</label>
-                    <select id="targetMajor1" required>
-                        <option value="" disabled selected>-- Pilih Program Studi 1 --</option>
-                    </select>
+            <div class="grid-2">
+                <div class="form-group" style="background:#eff6ff; padding:20px; border-radius:8px; border:1px solid #bfdbfe;">
+                    <label style="color:#1e40af;">🎯 Pilihan 1 (Prioritas Utama):</label>
+                    <select id="targetMajor1" required><option value="" disabled selected>-- Memuat Jurusan... --</option></select>
                 </div>
-
-                <div class="form-group" style="background: #f5f3ff; padding: 25px; border-radius: 12px; border: 1px solid #ddd6fe;">
-                    <label style="color: #5b21b6;">🛡️ Pilihan 2 (Rencana Cadangan):</label>
-                    <select id="targetMajor2" required>
-                        <option value="" disabled selected>-- Pilih Program Studi 2 --</option>
-                    </select>
+                <div class="form-group" style="background:#f5f3ff; padding:20px; border-radius:8px; border:1px solid #ddd6fe;">
+                    <label style="color:#5b21b6;">🛡️ Pilihan 2 (Rencana Cadangan):</label>
+                    <select id="targetMajor2" required><option value="" disabled selected>-- Memuat Jurusan... --</option></select>
                 </div>
             </div>
-
-            <div style="margin-top:25px; padding:18px; background:#e0e7ff; border-radius:10px; border:1px solid #c7d2fe; font-size:0.95rem; color:#3730a3; display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 1.5rem;">📚</span>
-                <span>Database telah diperbarui dengan <strong>130+ Program Studi</strong> (Kesehatan, MIPA, Teknik, Soshum, Pertanian, PTKIN & Kedinasan) berdasarkan referensi Aturan Pemilihan TKA terbaru.</span>
-            </div>
-
-            <div class="btn-group">
-                <button class="btn-next" onclick="nextStep(1)">Lanjut ke Input Nilai &rsaquo;</button>
-            </div>
+            <div class="btn-group"><button class="btn-next" onclick="nextStep(1)">Lanjut: Input Nilai Rapor &rsaquo;</button></div>
         </div>
 
-        <!-- STEP 2: INPUT AKADEMIK -->
+        <!-- STEP 2: INPUT NILAI RAPOR -->
         <div class="step-content" id="step2">
-            <h2>Langkah 2: Validasi Akademik Rapor</h2>
-            <p style="margin-bottom: 20px; color: var(--text-sub);">Masukkan nilai spesifik (0-100) dari rapor. Pastikan mengisi nilai untuk seluruh mata pelajaran berikut.</p>
+            <h2>Langkah 2: Rekam Jejak Akademik</h2>
+            <div style="background:#fee2e2; border-left:4px solid #ef4444; padding:12px; border-radius:4px; font-size:0.85rem; color:#b91c1c; margin-bottom:20px;">
+                <strong>Instruksi Penting:</strong> Kosongi input (jangan diisi 0) pada mapel pilihan Kelas 11 yang TIDAK kamu ambil di sekolah. Hanya isi yang benar-benar kamu pelajari.
+            </div>
 
-            <div class="input-grid">
-                <div class="form-group"><label>Matematika</label><input type="number" id="score_mtk" min="0" max="100" placeholder="0-100" required></div>
-                <div class="form-group"><label>Bahasa Indonesia</label><input type="number" id="score_bindo" min="0" max="100" placeholder="0-100" required></div>
-                <div class="form-group"><label>Bahasa Inggris</label><input type="number" id="score_bing" min="0" max="100" placeholder="0-100" required></div>
-                <div class="form-group"><label>Bahasa Arab <span style="font-weight:normal; font-size:0.8rem; color:#64748b;">(Wajib u/ PTKIN)</span></label><input type="number" id="score_barab" min="0" max="100" placeholder="0-100" required></div>
-                
-                <div class="form-group"><label>Fisika</label><input type="number" id="score_fis" min="0" max="100" placeholder="0-100" required></div>
-                <div class="form-group"><label>Kimia</label><input type="number" id="score_kim" min="0" max="100" placeholder="0-100" required></div>
-                <div class="form-group"><label>Biologi</label><input type="number" id="score_bio" min="0" max="100" placeholder="0-100" required></div>
-                <div class="form-group"><label>Informatika</label><input type="number" id="score_info" min="0" max="100" placeholder="0-100" required></div>
+            <!-- KELAS 10 -->
+            <div class="section-title">A. Kelas 10 (Mata Pelajaran Umum Terintegrasi)</div>
+            <div class="grade-wrapper">
+                <table class="grade-table">
+                    <tr><th>Mata Pelajaran Wajib (Kelas 10)</th><th width="22%">Semester 1</th><th width="22%">Semester 2</th></tr>
+                    <tr><td>PAI dan Budi Pekerti</td><td><input type="number" id="k10_pai_s1" max="100" class="umum-input" required></td><td><input type="number" id="k10_pai_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>PPKn (Pendidikan Pancasila)</td><td><input type="number" id="k10_pkn_s1" max="100" class="umum-input" required></td><td><input type="number" id="k10_pkn_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>Bahasa Indonesia</td><td><input type="number" id="k10_bindo_s1" max="100" class="umum-input" required></td><td><input type="number" id="k10_bindo_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>Matematika Umum</td><td><input type="number" id="k10_mtk_s1" max="100" class="umum-input" required></td><td><input type="number" id="k10_mtk_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>Bahasa Inggris</td><td><input type="number" id="k10_bing_s1" max="100" class="umum-input" required></td><td><input type="number" id="k10_bing_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>IPA (Fisika, Kimia, Biologi)</td><td><input type="number" id="k10_ipa_s1" max="100" class="umum-input" required></td><td><input type="number" id="k10_ipa_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>IPS (Sos, Eko, Sej, Geo)</td><td><input type="number" id="k10_ips_s1" max="100" class="umum-input" required></td><td><input type="number" id="k10_ips_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>PJOK</td><td><input type="number" id="k10_pjok_s1" max="100" class="umum-input" required></td><td><input type="number" id="k10_pjok_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>Seni Budaya & Prakarya</td><td><input type="number" id="k10_seni_s1" max="100" class="umum-input" required></td><td><input type="number" id="k10_seni_s2" max="100" class="umum-input" required></td></tr>
+                </table>
+            </div>
 
-                <div class="form-group"><label>Ekonomi</label><input type="number" id="score_eko" min="0" max="100" placeholder="0-100" required></div>
-                <div class="form-group"><label>Sosiologi</label><input type="number" id="score_sos" min="0" max="100" placeholder="0-100" required></div>
-                <div class="form-group"><label>Geografi</label><input type="number" id="score_geo" min="0" max="100" placeholder="0-100" required></div>
-                <div class="form-group"><label>Sejarah</label><input type="number" id="score_sej" min="0" max="100" placeholder="0-100" required></div>
+            <!-- KELAS 11 UMUM -->
+            <div class="section-title">B. Kelas 11 (Mata Pelajaran Umum)</div>
+            <div class="grade-wrapper">
+                <table class="grade-table">
+                    <tr><th>Mata Pelajaran Wajib (Kelas 11)</th><th width="22%">Semester 1</th><th width="22%">Semester 2</th></tr>
+                    <tr><td>PAI dan Budi Pekerti</td><td><input type="number" id="k11u_pai_s1" max="100" class="umum-input" required></td><td><input type="number" id="k11u_pai_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>PPKn</td><td><input type="number" id="k11u_pkn_s1" max="100" class="umum-input" required></td><td><input type="number" id="k11u_pkn_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>Bahasa Indonesia</td><td><input type="number" id="k11u_bindo_s1" max="100" class="umum-input" required></td><td><input type="number" id="k11u_bindo_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>Matematika Umum</td><td><input type="number" id="k11u_mtk_s1" max="100" class="umum-input" required></td><td><input type="number" id="k11u_mtk_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>Bahasa Inggris</td><td><input type="number" id="k11u_bing_s1" max="100" class="umum-input" required></td><td><input type="number" id="k11u_bing_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>Sejarah</td><td><input type="number" id="k11u_sej_s1" max="100" class="umum-input" required></td><td><input type="number" id="k11u_sej_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>PJOK</td><td><input type="number" id="k11u_pjok_s1" max="100" class="umum-input" required></td><td><input type="number" id="k11u_pjok_s2" max="100" class="umum-input" required></td></tr>
+                    <tr><td>Seni Budaya</td><td><input type="number" id="k11u_seni_s1" max="100" class="umum-input" required></td><td><input type="number" id="k11u_seni_s2" max="100" class="umum-input" required></td></tr>
+                </table>
+            </div>
+
+            <!-- KELAS 11 TKA -->
+            <div class="section-title" style="background:#fffbeb; border-color:var(--warning); color:#b45309;">
+                C. Kelas 11 (Mapel Pilihan TKA) - ⚠️ MAKSIMAL ISI 5 MAPEL
+            </div>
+            <div class="grade-wrapper">
+                <table class="grade-table" id="tkaTable">
+                    <tr><th>Opsi Mapel Pilihan (Kosongi yang tidak diambil)</th><th width="22%">Semester 1</th><th width="22%">Semester 2</th></tr>
+                    <!-- JS will populate -->
+                </table>
             </div>
 
             <div class="btn-group">
                 <button class="btn-prev" type="button" onclick="prevStep(2)">&lsaquo; Kembali</button>
-                <button class="btn-next" type="button" onclick="nextStep(2)">Lanjut ke Asesmen &rsaquo;</button>
+                <button class="btn-next" type="button" onclick="nextStep(2)">Lanjut: Asesmen Minat &rsaquo;</button>
             </div>
         </div>
 
-        <!-- STEP 3: ASESMEN MINAT (RIASEC) -->
+        <!-- STEP 3: RIASEC -->
         <div class="step-content" id="step3">
-            <h2>Langkah 3: Asesmen Minat Bakat</h2>
-            <p style="margin-bottom: 15px; color: var(--text-sub);">Jawablah secara jujur (Skala 1-5). <span id="kedinasan-badge" style="display:none; color: var(--kedinasan); font-weight:bold; background:#e0e7ff; padding:4px 8px; border-radius:4px;">+ Termasuk Tes Fisik Kedinasan</span></p>
-            
+            <h2>Langkah 3: Pemetaan Profil Psikologis</h2>
+            <p style="margin-bottom:15px; color:var(--text-sub);">Jawab dengan jujur sesuai intuisimu untuk memastikan kecocokan dengan program studi pilihan.</p>
             <div class="scale-legend">
                 <div class="scale-item"><span class="scale-num">1</span><span class="scale-desc">Sangat Tdk Suka</span></div>
-                <div class="scale-item"><span class="scale-num">2</span><span class="scale-desc">Tidak Suka</span></div>
-                <div class="scale-item"><span class="scale-num">3</span><span class="scale-desc">Biasa Saja</span></div>
+                <div class="scale-item"><span class="scale-num">2</span><span class="scale-desc">Tdk Suka</span></div>
+                <div class="scale-item"><span class="scale-num">3</span><span class="scale-desc">Biasa</span></div>
                 <div class="scale-item"><span class="scale-num">4</span><span class="scale-desc">Suka</span></div>
                 <div class="scale-item"><span class="scale-num">5</span><span class="scale-desc">Sangat Suka</span></div>
             </div>
-
-            <div class="scroll-area" id="dynamicQuestions"></div>
-
+            <div id="dynamicQuestions" style="max-height: 55vh; overflow-y: auto; padding: 5px;"></div>
             <div class="btn-group">
                 <button class="btn-prev" type="button" onclick="prevStep(3)">&lsaquo; Kembali</button>
-                <button class="btn-next" type="button" onclick="calculateResult()">✨ Analisis & Lihat Hasil</button>
+                <button class="btn-next" type="button" onclick="calculateResult()">✨ Minta SARI Analisis</button>
             </div>
         </div>
 
-        <!-- STEP 4: HASIL (REPORT) -->
+        <!-- STEP 4: SARI REPORT -->
         <div class="step-content" id="step4">
-            
-            <!-- SVG CERTIFICATE HEADER (FOR PRINT) -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 180" class="report-header-svg">
-                <defs>
-                    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#1e40af" />
-                        <stop offset="100%" stop-color="#3b82f6" />
-                    </linearGradient>
-                    <pattern id="pattern-dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <circle cx="2" cy="2" r="1.5" fill="rgba(255,255,255,0.15)"></circle>
-                    </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#bg-grad)" rx="16"></rect>
-                <rect width="100%" height="100%" fill="url(#pattern-dots)" rx="16"></rect>
-                
-                <g transform="translate(40, 40)">
-                    <circle cx="50" cy="50" r="45" fill="rgba(255,255,255,0.2)"></circle>
-                    <path d="M50 15 L80 25 V55 C80 75 65 90 50 95 C35 90 20 75 20 55 V25 Z" fill="rgba(255,255,255,0.95)" />
-                    <path d="M40 55 L48 65 L65 40" fill="none" stroke="#1e40af" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                </g>
-                
-                <text x="170" y="70" fill="white" font-family="system-ui, sans-serif" font-size="32" font-weight="800">Sertifikat Analisis Studi</text>
-                <text x="170" y="105" fill="rgba(255,255,255,0.9)" font-family="system-ui, sans-serif" font-size="16">Rekomendasi Mapel Pilihan &amp; Validitas Psikometrik</text>
-                <text x="170" y="135" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="14" id="reportDate">Dicetak pada: -</text>
-            </svg>
+            <div class="sari-header">
+                <div class="sari-avatar">🤖</div>
+                <div style="position: relative; z-index: 2;">
+                    <h2 style="color:white; border:none; margin:0 0 5px 0; padding:0; font-size:1.6rem;">Laporan Evaluasi SARI (Sobat Rasionalisasi)</h2>
+                    <p style="font-size:0.95rem; opacity:0.9; margin:0;">Analisis AI berbasis Ketuntasan Rapor Kurikulum Merdeka & Psikometri RIASEC.</p>
+                </div>
+            </div>
 
-            <h2 class="hide-on-print" style="text-align: center; border:none;">Laporan Analisis Penjurusan</h2>
-
-            <div class="result-grid">
-                <!-- KIRI: DAFTAR MAPEL -->
-                <div class="result-card">
-                    <h3 style="margin-bottom: 20px; color: var(--primary); display:flex; align-items:center; gap:10px;">
-                        <span>📋</span> 5 Rekomendasi Mapel Terbaik
-                    </h3>
-                    <ul id="finalList" style="list-style:none; padding:0;"></ul>
-                    <div style="font-size: 0.85rem; color: #64748b; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-style: italic;">
-                        *Dihasilkan dari sistem persilangan (intersection) mutlak atas prasyarat Prodi Pilihan 1 & 2.
+            <div class="report-grid">
+                <div>
+                    <div class="sari-box">
+                        <h3 style="color:var(--ai-color); margin-bottom:15px; font-size:1.1rem;">🎯 5 Mapel Penunjang TKA SNBP Terpilih:</h3>
+                        <div id="finalList"></div>
+                        <div style="font-size:0.8rem; color:#64748b; margin-top:15px; font-style:italic;">*Urutan didasarkan pada kombinasi syarat mutlak jurusan, nilai akademik, dan kecocokan bakat.</div>
+                    </div>
+                    <div class="sari-box" style="background:#f0fdf4; border-color:#bbf7d0;" id="planBSecurity">
+                        <!-- Plan B text -->
                     </div>
                 </div>
-
-                <!-- KANAN: METERAN & KODE -->
+                
                 <div>
-                    <div id="validityBox" class="validity-box">
-                        <div class="validity-score" id="validityScoreText">0%</div>
-                        <div class="validity-label">Skor Validitas Kelayakan</div>
-                        <div style="font-size: 0.8rem; margin-top: 8px; color: #64748b;">(Gabungan Akademik & Minat)</div>
+                    <div class="sari-box" style="text-align:center; padding: 35px 20px;">
+                        <div style="font-size:0.85rem; font-weight:bold; color:var(--text-sub); text-transform:uppercase; letter-spacing:1px;">Skor Validitas Kelayakan</div>
+                        <div class="validity-score" id="vScore">0%</div>
+                        <div style="font-size:0.75rem; color:#64748b; margin-top:5px; padding:0 15px;">Mencerminkan peluang SNBP dan ketahanan mental perkuliahan.</div>
                     </div>
-                    
-                    <div class="result-card" style="padding: 20px; text-align: center;">
-                        <h4 style="margin-bottom:10px; font-size:0.95rem; color:#64748b; text-transform: uppercase; letter-spacing: 1px;">Kode Minat (RIASEC):</h4>
-                        <div id="riasecScores" style="font-family: monospace; font-weight:900; font-size:1.8rem; color: var(--primary); background: #eff6ff; padding: 10px; border-radius: 8px;"></div>
+                    <div class="sari-box" style="text-align:center;">
+                        <div style="font-size:0.85rem; font-weight:bold; color:var(--text-sub); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Kode Genetik Minat (Holland)</div>
+                        <div style="font-size:1.8rem; font-weight:900; color:var(--ai-color); letter-spacing:3px; background:#f3e8ff; display:inline-block; padding:10px 20px; border-radius:8px;" id="riasecCode"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- BAWAH: DIAGNOSA AHLI -->
-            <div class="diagnosis-container" id="finalPsychAnalysis"></div>
-            
+            <div class="sari-box" style="background:white; border-left:5px solid var(--ai-color); margin-top: 5px;">
+                <h3 style="color:var(--ai-color); margin-bottom:12px; font-size:1.1rem;">💡 Diagnosa Mendalam & Saran Tindakan SARI:</h3>
+                <div id="sariAdvice" style="font-size:0.95rem; line-height:1.7; color:var(--text-main);"></div>
+            </div>
+
             <div class="btn-group hide-on-print">
-                <button class="btn-prev" type="button" onclick="location.reload()">↺ Ulangi</button>
-                <button class="btn-next" type="button" onclick="window.print()">🖨️ Cetak Dokumen PDF</button>
+                <button class="btn-prev" type="button" onclick="location.reload()">↺ Uji Ulang (Reset)</button>
+                <button class="btn-next" style="background:var(--ai-color);" type="button" onclick="window.print()">🖨️ Cetak PDF Resmi</button>
             </div>
         </div>
     </form>
     
     <footer>
-        &copy; Aplikasi Analisis Mapel ini dikembangkan oleh <strong>Pak Ndutz BK Al-Multazam</strong>.
+        &copy; 2026 Aplikasi Pemetaan Mapel - <strong>Pak Ndutz BK Al-Multazam</strong><br>
+        <span style="font-size:0.75rem;">Didukung oleh SARI (Sobat Rasionalisasi AI) System</span>
     </footer>
 </div>
 
 <script>
-    // --- 1. DATA DATABASE MAPEL (12 SUBJECTS) ---
-    const subjectsDB = [
-        { id: 'mtk', name: 'Matematika', riasec: ['I', 'C'], inputKey: 'score_mtk' },
-        { id: 'bindo', name: 'Bahasa Indonesia', riasec: ['A', 'S', 'C'], inputKey: 'score_bindo' },
-        { id: 'bing', name: 'Bahasa Inggris', riasec: ['A', 'S', 'E'], inputKey: 'score_bing' },
-        { id: 'barab', name: 'Bahasa Arab', riasec: ['S', 'A', 'C'], inputKey: 'score_barab' },
-        { id: 'info', name: 'Informatika', riasec: ['C', 'I', 'R'], inputKey: 'score_info' },
-        { id: 'fis', name: 'Fisika', riasec: ['R', 'I'], inputKey: 'score_fis' },
-        { id: 'kim', name: 'Kimia', riasec: ['I', 'R'], inputKey: 'score_kim' },
-        { id: 'bio', name: 'Biologi', riasec: ['I', 'S'], inputKey: 'score_bio' },
-        { id: 'eko', name: 'Ekonomi', riasec: ['E', 'C'], inputKey: 'score_eko' },
-        { id: 'sos', name: 'Sosiologi', riasec: ['S', 'E'], inputKey: 'score_sos' },
-        { id: 'geo', name: 'Geografi', riasec: ['R', 'I', 'S'], inputKey: 'score_geo' },
-        { id: 'sej', name: 'Sejarah', riasec: ['I', 'S', 'A'], inputKey: 'score_sej' }
+    const tkaSubjects = [
+        { id: 'bio', name: 'Biologi', riasec: ['I','S'] },
+        { id: 'kim', name: 'Kimia', riasec: ['I','R'] },
+        { id: 'fis', name: 'Fisika', riasec: ['R','I'] },
+        { id: 'mtkl', name: 'Matematika Tingkat Lanjut', riasec: ['I','C'] },
+        { id: 'info', name: 'Informatika', riasec: ['C','I','R'] },
+        { id: 'sos', name: 'Sosiologi', riasec: ['S','E'] },
+        { id: 'eko', name: 'Ekonomi', riasec: ['E','C'] },
+        { id: 'geo', name: 'Geografi', riasec: ['R','I','S'] },
+        { id: 'sejl', name: 'Sejarah Tingkat Lanjut', riasec: ['I','S','A'] },
+        { id: 'ant', name: 'Antropologi', riasec: ['I','S'] },
+        { id: 'bindol', name: 'Bahasa Indonesia Tkt Lanjut', riasec: ['A','S'] },
+        { id: 'bingl', name: 'Bahasa Inggris Tkt Lanjut', riasec: ['A','S','E'] },
+        { id: 'barab', name: 'Bahasa Arab', riasec: ['S','A','C'] }
     ];
 
-    // --- 2. DATA JURUSAN & PRASYARAT (BERDASARKAN GAMBAR/ATURAN TKA) ---
+    // Database 130+ Jurusan berdasarkan referensi PDF resmi SNBP
     const majorsData = {
-        // KESEHATAN
-        'Kesehatan_Kedokteran': { name: 'Kedokteran / Dokter Gigi / Kedokteran Hewan', req: ['bio', 'kim'], riasec: ['I', 'S', 'R'] },
-        'Kesehatan_Farmasi': { name: 'Farmasi / Profesi Apoteker', req: ['kim', 'bio'], riasec: ['I', 'C'] },
-        'Kesehatan_Keperawatan': { name: 'Keperawatan / Kebidanan / Gizi', req: ['bio', 'kim'], riasec: ['S', 'I'] },
-        'Kesehatan_Masyarakat': { name: 'Kesehatan Masyarakat / Kesling', req: ['bio', 'kim'], riasec: ['S', 'I', 'C'] },
-        'Kesehatan_Fisioterapi': { name: 'Fisioterapi / Ilmu Keolahragaan', req: ['bio', 'fis'], riasec: ['S', 'R'] },
-        'Kesehatan_RekamMedis': { name: 'Rekam Medis / Biostatistik', req: ['bio', 'mtk'], riasec: ['C', 'I'] },
-        'Kesehatan_AdminRS': { name: 'Administrasi Rumah Sakit', req: ['eko', 'mtk'], riasec: ['E', 'C'] },
-        'Kesehatan_Radiologi': { name: 'Radiologi / Teknik Radiodiagnostik', req: ['fis', 'bio'], riasec: ['R', 'I'] },
-        
-        // BIOLOGI & PERTANIAN
-        'Pertanian_Biologi': { name: 'Biologi / Bioteknologi / Mikrobiologi', req: ['bio', 'kim'], riasec: ['I', 'R'] },
-        'Pertanian_BioInformatika': { name: 'Bioinformatika', req: ['bio', 'mtk'], riasec: ['I', 'C'] },
-        'Pertanian_Agrotek': { name: 'Agroteknologi / Agronomi / Ilmu Tanah', req: ['bio', 'kim'], riasec: ['R', 'I'] },
-        'Pertanian_Agribisnis': { name: 'Agribisnis / Agroekonomi', req: ['eko', 'bio'], riasec: ['E', 'R', 'C'] },
-        'Pertanian_Penyuluhan': { name: 'Penyuluhan Pertanian', req: ['bio', 'sos'], riasec: ['S', 'R'] },
-        'Pertanian_TeknologiPangan': { name: 'Teknologi Pangan / Hasil Pertanian', req: ['kim', 'bio'], riasec: ['I', 'R'] },
-        'Pertanian_TeknologiIndustri': { name: 'Teknologi Industri Pertanian', req: ['mtk', 'kim'], riasec: ['R', 'C'] },
-        'Pertanian_Kelautan': { name: 'Ilmu Kelautan / Budidaya Perairan', req: ['bio', 'geo'], riasec: ['R', 'I'] },
-        'Pertanian_Kehutanan': { name: 'Kehutanan / Silvikultur', req: ['bio', 'geo'], riasec: ['R', 'I'] },
-        'Pertanian_Peternakan': { name: 'Peternakan / Nutrisi Pakan', req: ['bio', 'kim'], riasec: ['R', 'I'] },
-        
-        // MIPA MURNI
-        'Mipa_Matematika': { name: 'Matematika / Matematika Terapan', req: ['mtk', 'fis'], riasec: ['I', 'C'] },
-        'Mipa_Statistika': { name: 'Statistika / Aktuaria', req: ['mtk', 'eko'], riasec: ['I', 'C', 'E'] },
-        'Mipa_Fisika': { name: 'Fisika / Geofisika / Astronomi', req: ['fis', 'mtk'], riasec: ['I', 'R'] },
-        'Mipa_Kimia': { name: 'Kimia / Kimia Analitik', req: ['kim', 'mtk'], riasec: ['I'] },
-        'Mipa_SainsData': { name: 'Sains Data / Analitika Data', req: ['mtk', 'info'], riasec: ['I', 'C'] },
-        
-        // TEKNIK
-        'Teknik_Sipil': { name: 'Teknik Sipil / Mesin / Elektro', req: ['fis', 'mtk'], riasec: ['R', 'I', 'C'] },
-        'Teknik_Industri': { name: 'Teknik Industri / Manufaktur', req: ['mtk', 'fis'], riasec: ['E', 'R', 'C'] },
-        'Teknik_Kimia': { name: 'Teknik Kimia', req: ['kim', 'mtk'], riasec: ['I', 'R'] },
-        'Teknik_Lingkungan': { name: 'Teknik Lingkungan', req: ['kim', 'fis'], riasec: ['I', 'R'] },
-        'Teknik_Geologi': { name: 'Teknik Geologi / Geodesi', req: ['mtk', 'geo'], riasec: ['R', 'I'] },
-        'Teknik_Informatika': { name: 'Informatika / Ilmu Komputer / Sistem Informasi', req: ['mtk', 'info'], riasec: ['I', 'C', 'R'] },
-        'Teknik_Biomedis': { name: 'Teknik Biomedis', req: ['fis', 'bio'], riasec: ['I', 'R'] },
-        'Teknik_Logistik': { name: 'Teknik Logistik', req: ['mtk', 'eko'], riasec: ['C', 'E'] },
-        'Teknik_Arsitektur': { name: 'Arsitektur', req: ['mtk', 'fis'], riasec: ['A', 'R', 'I'] },
-        'Teknik_PWK': { name: 'Perencanaan Wilayah & Kota (PWK)', req: ['geo', 'mtk'], riasec: ['R', 'I', 'A'] },
-        
-        // SOSHUM & BISNIS
-        'Soshum_Manajemen': { name: 'Manajemen / Bisnis Digital / Kewirausahaan', req: ['eko', 'mtk'], riasec: ['E', 'C'] },
-        'Soshum_Akuntansi': { name: 'Akuntansi / Keuangan / Perbankan', req: ['eko', 'mtk'], riasec: ['C', 'E'] },
-        'Soshum_IlmuEkonomi': { name: 'Ilmu Ekonomi / Ekonomi Pembangunan', req: ['eko', 'mtk'], riasec: ['E', 'I', 'C'] },
-        'Soshum_AdminBisnis': { name: 'Administrasi Bisnis', req: ['eko', 'sos'], riasec: ['E', 'C', 'S'] },
-        'Soshum_AdminPublik': { name: 'Administrasi Publik / Ilmu Politik / HI', req: ['sos', 'sej'], riasec: ['E', 'S'] },
-        'Soshum_Sosiologi': { name: 'Sosiologi / Antropologi / Kriminologi', req: ['sos', 'sej'], riasec: ['I', 'S'] },
-        'Soshum_Psikologi': { name: 'Psikologi / Kesejahteraan Sosial', req: ['bio', 'sos'], riasec: ['S', 'I', 'A'] },
-        'Soshum_Hukum': { name: 'Hukum', req: ['sos', 'sej'], riasec: ['E', 'S', 'I'] },
-        'Soshum_Komunikasi': { name: 'Ilmu Komunikasi / Jurnalistik / Penyiaran', req: ['sos', 'bindo'], riasec: ['A', 'E', 'S'] },
-        'Soshum_Pariwisata': { name: 'Pariwisata / Manajemen Pariwisata', req: ['geo', 'eko'], riasec: ['E', 'S', 'C'] },
-        
-        // KEGURUAN & PENDIDIKAN
-        'Pend_Matematika': { name: 'Pendidikan Matematika', req: ['mtk', 'fis'], riasec: ['S', 'I', 'C'] },
-        'Pend_Biologi': { name: 'Pendidikan Biologi', req: ['bio', 'kim'], riasec: ['S', 'I'] },
-        'Pend_Fisika': { name: 'Pendidikan Fisika', req: ['fis', 'mtk'], riasec: ['S', 'I'] },
-        'Pend_Geografi': { name: 'Pendidikan Geografi', req: ['geo', 'sos'], riasec: ['S', 'R'] },
-        'Pend_Sejarah': { name: 'Pendidikan Sejarah', req: ['sej', 'sos'], riasec: ['S', 'A'] },
-        'Pend_Ekonomi': { name: 'Pendidikan Ekonomi', req: ['eko', 'mtk'], riasec: ['S', 'E'] },
-        'Pend_Bindo': { name: 'Pendidikan Bahasa Indonesia', req: ['bindo', 'sos'], riasec: ['S', 'A'] },
-        'Pend_Bing': { name: 'Pendidikan Bahasa Inggris', req: ['bing', 'bindo'], riasec: ['S', 'A'] },
-        'Pend_PGSD': { name: 'PGSD / PGPAUD', req: ['bindo', 'mtk'], riasec: ['S', 'A'] },
-        'Pend_Informatika': { name: 'Pendidikan Informatika', req: ['mtk', 'info'], riasec: ['S', 'C'] },
-        
-        // PTKIN (AGAMA)
-        'Ptkin_PAI': { name: 'Pendidikan Agama Islam (PAI)', req: ['sos', 'sej'], riasec: ['S', 'A'] },
-        'Ptkin_BArab': { name: 'Pendidikan Bahasa Arab / Sastra Arab', req: ['barab', 'bindo'], riasec: ['S', 'A'] },
-        'Ptkin_GuruMI': { name: 'Pendidikan Guru MI / RA', req: ['bindo', 'mtk'], riasec: ['S'] },
-        'Ptkin_HukumKeluarga': { name: 'Hukum Keluarga Islam / Tata Negara', req: ['sos', 'sej'], riasec: ['S', 'E'] },
-        'Ptkin_EkonomiSyariah': { name: 'Ekonomi / Perbankan / Akuntansi Syariah', req: ['eko', 'mtk'], riasec: ['E', 'C'] },
-        'Ptkin_ManajemenDakwah': { name: 'Manajemen Dakwah / Manajemen Pendidikan', req: ['sos', 'eko'], riasec: ['E', 'S'] },
-        'Ptkin_IlmuQuran': { name: 'Ilmu Al-Qur\'an / Ilmu Hadis', req: ['barab', 'sej'], riasec: ['I', 'A'] },
-        'Ptkin_BimbinganKonseling': { name: 'Bimbingan Konseling Islam / Psikoterapi', req: ['sos', 'bio'], riasec: ['S', 'I'] },
-        
-        // KEDINASAN
-        'Kedinasan_Umum': { name: 'Sekolah Kedinasan (STAN/STIS/IPDN/AKPOL)', req: ['mtk', 'bing'], riasec: ['E', 'C', 'R'] }
+        // --- KESEHATAN ---
+        'Kes_Kedokteran': { cat: 'Rumpun Kesehatan', name: 'Kedokteran', req: ['bio', 'kim'], riasec: ['I', 'S', 'R'] },
+        'Kes_KedGigi': { cat: 'Rumpun Kesehatan', name: 'Kedokteran Gigi', req: ['bio', 'kim'], riasec: ['I', 'S', 'R'] },
+        'Kes_Farmasi': { cat: 'Rumpun Kesehatan', name: 'Farmasi / Profesi Apoteker', req: ['kim', 'bio'], riasec: ['I', 'C'] },
+        'Kes_Perawat': { cat: 'Rumpun Kesehatan', name: 'Keperawatan / Kebidanan', req: ['bio', 'kim'], riasec: ['S', 'I'] },
+        'Kes_Gizi': { cat: 'Rumpun Kesehatan', name: 'Gizi / Teknologi Pangan Gizi', req: ['bio', 'kim'], riasec: ['I', 'S'] },
+        'Kes_Kesmas': { cat: 'Rumpun Kesehatan', name: 'Kesehatan Masyarakat / Promosi Kes', req: ['bio', 'kim'], riasec: ['S', 'I', 'C'] },
+        'Kes_Kesling': { cat: 'Rumpun Kesehatan', name: 'Kesehatan Lingkungan / K3', req: ['bio', 'kim'], riasec: ['I', 'R'] },
+        'Kes_Fisio': { cat: 'Rumpun Kesehatan', name: 'Fisioterapi / Audiologi', req: ['bio', 'fis'], riasec: ['S', 'R'] },
+        'Kes_Okupasi': { cat: 'Rumpun Kesehatan', name: 'Terapi Okupasi', req: ['bio', 'kim'], riasec: ['S', 'I'] },
+        'Kes_Lab': { cat: 'Rumpun Kesehatan', name: 'Teknologi Lab Medis / Analis Kes', req: ['bio', 'kim'], riasec: ['I', 'R'] },
+        'Kes_Radio': { cat: 'Rumpun Kesehatan', name: 'Radiologi / Teknik Radiodiagnostik', req: ['fis', 'bio'], riasec: ['R', 'I'] },
+        'Kes_RekamMedis': { cat: 'Rumpun Kesehatan', name: 'Rekam Medis / Epidemiologi', req: ['bio', 'mtkl'], riasec: ['C', 'I'] },
+        'Kes_AdminRS': { cat: 'Rumpun Kesehatan', name: 'Administrasi Rumah Sakit', req: ['eko', 'mtkl'], riasec: ['E', 'C'] },
+        'Kes_KedHewan': { cat: 'Rumpun Kesehatan', name: 'Kedokteran Hewan', req: ['bio', 'kim'], riasec: ['I', 'R'] },
+        'Kes_Olahraga': { cat: 'Rumpun Kesehatan', name: 'Ilmu Keolahragaan', req: ['bio', 'fis'], riasec: ['R', 'S'] },
+        'Kes_Biomedis': { cat: 'Rumpun Kesehatan', name: 'Biomedis / Bioteknologi Kes', req: ['bio', 'kim'], riasec: ['I', 'R'] },
+        'Kes_TekBiomedis': { cat: 'Rumpun Kesehatan', name: 'Teknik Biomedis', req: ['fis', 'mtkl'], riasec: ['I', 'R', 'C'] },
+
+        // --- PERTANIAN, KEHUTANAN, PERIKANAN ---
+        'Pert_Biologi': { cat: 'Biologi & Pertanian', name: 'Biologi / Mikrobiologi / Bioteknologi', req: ['bio', 'kim'], riasec: ['I', 'R'] },
+        'Pert_Bioinfo': { cat: 'Biologi & Pertanian', name: 'Bioinformatika / Pemuliaan Tanaman', req: ['bio', 'mtkl'], riasec: ['I', 'C'] },
+        'Pert_Agrotek': { cat: 'Biologi & Pertanian', name: 'Agroteknologi / Agronomi / Proteksi Tanaman', req: ['bio', 'kim'], riasec: ['R', 'I'] },
+        'Pert_Tanah': { cat: 'Biologi & Pertanian', name: 'Ilmu Tanah', req: ['kim', 'bio'], riasec: ['R', 'I'] },
+        'Pert_Agribisnis': { cat: 'Biologi & Pertanian', name: 'Agribisnis / Agroekonomi / SosEk Peternakan', req: ['eko', 'bio'], riasec: ['E', 'R'] },
+        'Pert_Penyuluhan': { cat: 'Biologi & Pertanian', name: 'Penyuluhan Pertanian', req: ['bio', 'sos'], riasec: ['S', 'R'] },
+        'Pert_TekPangan': { cat: 'Biologi & Pertanian', name: 'Teknologi Pangan / Hasil Pertanian', req: ['kim', 'bio'], riasec: ['I', 'R'] },
+        'Pert_TekIndPert': { cat: 'Biologi & Pertanian', name: 'Teknologi Industri Pertanian', req: ['mtkl', 'kim'], riasec: ['R', 'C'] },
+        'Pert_Perikanan': { cat: 'Biologi & Pertanian', name: 'Tek. Hasil Perikanan / Akuakultur', req: ['bio', 'kim'], riasec: ['R', 'I'] },
+        'Pert_Kelautan': { cat: 'Biologi & Pertanian', name: 'Ilmu Kelautan / MSP', req: ['bio', 'geo'], riasec: ['R', 'I'] },
+        'Pert_Oseanografi': { cat: 'Biologi & Pertanian', name: 'Oseanografi', req: ['fis', 'geo'], riasec: ['I', 'R'] },
+        'Pert_TekKelautan': { cat: 'Biologi & Pertanian', name: 'Teknologi Kelautan', req: ['fis', 'mtkl'], riasec: ['R', 'I'] },
+        'Pert_Kehutanan': { cat: 'Biologi & Pertanian', name: 'Kehutanan / Silvikultur / Ekowisata', req: ['bio', 'geo'], riasec: ['R', 'I'] },
+        'Pert_Peternakan': { cat: 'Biologi & Pertanian', name: 'Peternakan / Nutrisi Pakan', req: ['bio', 'kim'], riasec: ['R', 'I'] },
+        'Pert_Lingkungan': { cat: 'Biologi & Pertanian', name: 'Ilmu Lingkungan', req: ['bio', 'kim'], riasec: ['I', 'R'] },
+
+        // --- MIPA MURNI ---
+        'Mipa_Math': { cat: 'MIPA Murni', name: 'Matematika / Matematika Terapan', req: ['mtkl', 'fis'], riasec: ['I', 'C'] },
+        'Mipa_Statistika': { cat: 'MIPA Murni', name: 'Statistika / Aktuaria', req: ['mtkl', 'eko'], riasec: ['I', 'C'] },
+        'Mipa_Fisika': { cat: 'MIPA Murni', name: 'Fisika / Geofisika / Astronomi', req: ['fis', 'mtkl'], riasec: ['I', 'R'] },
+        'Mipa_Kimia': { cat: 'MIPA Murni', name: 'Kimia / Kimia Analitik', req: ['kim', 'mtkl'], riasec: ['I'] },
+        'Mipa_Klimat': { cat: 'MIPA Murni', name: 'Klimatologi / Sains Atmosfer', req: ['fis', 'geo'], riasec: ['I', 'R'] },
+        'Mipa_Data': { cat: 'MIPA Murni', name: 'Sains Data / Komputasi Statistik', req: ['mtkl', 'info'], riasec: ['I', 'C'] },
+
+        // --- TEKNIK ---
+        'Tek_Sipil': { cat: 'Rumpun Teknik', name: 'Teknik Sipil / Pengairan / Bangunan', req: ['fis', 'mtkl'], riasec: ['R', 'I', 'C'] },
+        'Tek_Mesin': { cat: 'Rumpun Teknik', name: 'Teknik Mesin / Otomotif / Dirgantara', req: ['fis', 'mtkl'], riasec: ['R', 'I'] },
+        'Tek_Elektro': { cat: 'Rumpun Teknik', name: 'Teknik Elektro / Telekomunikasi', req: ['fis', 'mtkl'], riasec: ['R', 'I'] },
+        'Tek_Industri': { cat: 'Rumpun Teknik', name: 'Teknik Industri / Manufaktur', req: ['mtkl', 'fis'], riasec: ['E', 'R', 'C'] },
+        'Tek_Kimia': { cat: 'Rumpun Teknik', name: 'Teknik Kimia / Metalurgi / Material', req: ['kim', 'mtkl'], riasec: ['I', 'R'] },
+        'Tek_Lingkungan': { cat: 'Rumpun Teknik', name: 'Teknik Lingkungan', req: ['kim', 'fis'], riasec: ['I', 'R'] },
+        'Tek_Geologi': { cat: 'Rumpun Teknik', name: 'Teknik Geologi', req: ['fis', 'geo'], riasec: ['R', 'I'] },
+        'Tek_Geodesi': { cat: 'Rumpun Teknik', name: 'Teknik Geodesi / Geomatika', req: ['mtkl', 'geo'], riasec: ['R', 'I'] },
+        'Tek_Info': { cat: 'Rumpun Teknik', name: 'T. Informatika / Ilkom / Sistem Informasi', req: ['mtkl', 'info'], riasec: ['I', 'C', 'R'] },
+        'Tek_Perminyakan': { cat: 'Rumpun Teknik', name: 'Teknik Perminyakan / Pertambangan', req: ['kim', 'fis'], riasec: ['R', 'I'] },
+        'Tek_Robotika': { cat: 'Rumpun Teknik', name: 'Teknik Robotika / Mekatronika', req: ['mtkl', 'fis'], riasec: ['R', 'I'] },
+        'Tek_Logistik': { cat: 'Rumpun Teknik', name: 'Teknik Logistik / Transportasi', req: ['mtkl', 'eko'], riasec: ['C', 'E'] },
+        'Tek_Arsitektur': { cat: 'Rumpun Teknik', name: 'Arsitektur', req: ['mtkl', 'fis'], riasec: ['A', 'R', 'I'] },
+        'Tek_Lanskap': { cat: 'Rumpun Teknik', name: 'Arsitektur Lanskap / PWK', req: ['geo', 'mtkl'], riasec: ['A', 'R', 'I'] },
+
+        // --- SOSHUM & BISNIS ---
+        'Sos_Manajemen': { cat: 'Soshum & Bisnis', name: 'Manajemen / Bisnis / Kewirausahaan', req: ['eko', 'mtkl'], riasec: ['E', 'C'] },
+        'Sos_Akuntansi': { cat: 'Soshum & Bisnis', name: 'Akuntansi / Keuangan / Pajak', req: ['eko', 'mtkl'], riasec: ['C', 'E'] },
+        'Sos_EkoPem': { cat: 'Soshum & Bisnis', name: 'Ilmu Ekonomi / Ekonomi Pembangunan', req: ['eko', 'mtkl'], riasec: ['E', 'C', 'I'] },
+        'Sos_BisDig': { cat: 'Soshum & Bisnis', name: 'Bisnis Digital', req: ['eko', 'info'], riasec: ['E', 'C', 'I'] },
+        'Sos_AdmBis': { cat: 'Soshum & Bisnis', name: 'Administrasi Bisnis / Niaga', req: ['eko', 'sos'], riasec: ['E', 'C'] },
+        'Sos_AdmPub': { cat: 'Soshum & Bisnis', name: 'Administrasi Publik / Negara', req: ['sos', 'eko'], riasec: ['E', 'S', 'C'] },
+        'Sos_PolGov': { cat: 'Soshum & Bisnis', name: 'Ilmu Politik / Pemerintahan', req: ['sos', 'sejl'], riasec: ['E', 'S'] },
+        'Sos_HI': { cat: 'Soshum & Bisnis', name: 'Hubungan Internasional (HI)', req: ['sos', 'sejl'], riasec: ['E', 'S', 'A'] },
+        'Sos_Sosiologi': { cat: 'Soshum & Bisnis', name: 'Sosiologi / Antropologi / Kriminologi', req: ['sos', 'sejl'], riasec: ['I', 'S'] },
+        'Sos_Psikologi': { cat: 'Soshum & Bisnis', name: 'Psikologi', req: ['bio', 'sos'], riasec: ['S', 'I', 'A'] },
+        'Sos_Hukum': { cat: 'Soshum & Bisnis', name: 'Ilmu Hukum', req: ['sos', 'sejl'], riasec: ['E', 'S', 'I'] },
+        'Sos_Komunikasi': { cat: 'Soshum & Bisnis', name: 'Ilmu Komunikasi / Penyiaran', req: ['sos', 'bindol'], riasec: ['A', 'E', 'S'] },
+        'Sos_Pariwisata': { cat: 'Soshum & Bisnis', name: 'Pariwisata / Perhotelan', req: ['geo', 'eko'], riasec: ['E', 'S', 'C'] },
+
+        // --- KEGURUAN & PENDIDIKAN ---
+        'Pend_Math': { cat: 'Keguruan & Pendidikan', name: 'Pendidikan Matematika', req: ['mtkl', 'fis'], riasec: ['S', 'I', 'C'] },
+        'Pend_Bio': { cat: 'Keguruan & Pendidikan', name: 'Pendidikan Biologi', req: ['bio', 'kim'], riasec: ['S', 'I'] },
+        'Pend_Kimia': { cat: 'Keguruan & Pendidikan', name: 'Pendidikan Kimia', req: ['kim', 'mtkl'], riasec: ['S', 'I'] },
+        'Pend_Fisika': { cat: 'Keguruan & Pendidikan', name: 'Pendidikan Fisika', req: ['fis', 'mtkl'], riasec: ['S', 'I'] },
+        'Pend_Geo': { cat: 'Keguruan & Pendidikan', name: 'Pendidikan Geografi', req: ['geo', 'sos'], riasec: ['S', 'R'] },
+        'Pend_Sej': { cat: 'Keguruan & Pendidikan', name: 'Pendidikan Sejarah', req: ['sejl', 'sos'], riasec: ['S', 'A'] },
+        'Pend_Eko': { cat: 'Keguruan & Pendidikan', name: 'Pendidikan Ekonomi', req: ['eko', 'mtkl'], riasec: ['S', 'E'] },
+        'Pend_Bindo': { cat: 'Keguruan & Pendidikan', name: 'Pendidikan Bahasa Indonesia', req: ['bindol', 'sos'], riasec: ['S', 'A'] },
+        'Pend_Bing': { cat: 'Keguruan & Pendidikan', name: 'Pendidikan Bahasa Inggris', req: ['bingl', 'bindol'], riasec: ['S', 'A'] },
+        'Pend_PGSD': { cat: 'Keguruan & Pendidikan', name: 'PGSD (Guru SD)', req: ['bindol', 'mtkl'], riasec: ['S', 'A'] },
+        'Pend_PAUD': { cat: 'Keguruan & Pendidikan', name: 'PGPAUD (Guru TK)', req: ['bindol', 'sos'], riasec: ['S', 'A'] },
+        'Pend_Info': { cat: 'Keguruan & Pendidikan', name: 'Pendidikan Informatika', req: ['mtkl', 'info'], riasec: ['S', 'C'] },
+
+        // --- PTKIN (UIN/IAIN/STAIN) ---
+        'Ptkin_PAI': { cat: 'PTKIN (Agama Islam)', name: 'Pend. Agama Islam (PAI)', req: ['sos', 'sejl'], riasec: ['S', 'A'] },
+        'Ptkin_BArab': { cat: 'PTKIN (Agama Islam)', name: 'Pend. Bahasa Arab / Sastra Arab', req: ['barab', 'bindol'], riasec: ['S', 'A'] },
+        'Ptkin_PGMI': { cat: 'PTKIN (Agama Islam)', name: 'Pend. Guru MI (PGMI) / RA', req: ['bindol', 'mtkl'], riasec: ['S', 'A'] },
+        'Ptkin_HkKeluarga': { cat: 'PTKIN (Agama Islam)', name: 'Hukum Keluarga / HTN', req: ['sos', 'sejl'], riasec: ['S', 'E'] },
+        'Ptkin_EkSyariah': { cat: 'PTKIN (Agama Islam)', name: 'Ekonomi / Perbankan Syariah', req: ['eko', 'mtkl'], riasec: ['E', 'C'] },
+        'Ptkin_ManDakwah': { cat: 'PTKIN (Agama Islam)', name: 'Manajemen Dakwah / KPI', req: ['sos', 'eko'], riasec: ['E', 'S'] },
+        'Ptkin_Quran': { cat: 'PTKIN (Agama Islam)', name: 'Ilmu Al-Quran Tafsir / Hadis', req: ['barab', 'sejl'], riasec: ['I', 'A'] },
+        'Ptkin_BPI': { cat: 'PTKIN (Agama Islam)', name: 'Bimbingan Konseling Islam', req: ['sos', 'bio'], riasec: ['S', 'I'] }
     };
 
-    // --- 3. SOAL ASSESMEN RIASEC & KEDINASAN (48 + 4) ---
     const psychQuestions = [
-        { t: 'R', q: 'Suka mengutak-atik atau memperbaiki barang rusak (elektronik/mesin).' },
-        { t: 'R', q: 'Senang kegiatan fisik di luar ruangan (berkebun, mendaki, olahraga).' },
-        { t: 'R', q: 'Suka merakit benda, lego, atau membuat prakarya teknik.' },
-        { t: 'R', q: 'Terbiasa menggunakan alat pertukangan (obeng, palu, dll).' },
-        { t: 'R', q: 'Suka merawat hewan peliharaan atau menanam tumbuhan.' },
-        { t: 'R', q: 'Aktif dalam olahraga atau kegiatan fisik yang menguras keringat.' },
-        { t: 'R', q: 'Penasaran dengan cara kerja mesin motor, mobil, atau robotik.' },
-        { t: 'R', q: 'Suka membuat kerajinan dari kayu, logam, atau bahan keras.' },
-        { t: 'I', q: 'Tertantang mengerjakan soal matematika atau logika yang rumit.' },
-        { t: 'I', q: 'Suka melakukan percobaan sains atau praktikum.' },
-        { t: 'I', q: 'Senang membaca info tentang penemuan ilmu pengetahuan terbaru.' },
-        { t: 'I', q: 'Suka mengamati tabel, grafik data, atau angka statistik.' },
-        { t: 'I', q: 'Suka main game yang sangat mengandalkan strategi dan pemikiran.' },
-        { t: 'I', q: 'Tertarik belajar tentang antariksa, alam semesta, atau fenomena alam.' },
-        { t: 'I', q: 'Selalu ingin mencari tahu alasan ilmiah "kenapa" sesuatu bisa terjadi.' },
-        { t: 'I', q: 'Suka meneliti kebenaran fakta sejarah atau budaya secara mendalam.' },
-        { t: 'A', q: 'Hobi menggambar, melukis, atau membuat desain grafis.' },
-        { t: 'A', q: 'Suka menulis cerita pendek, puisi, atau karya sastra.' },
-        { t: 'A', q: 'Bisa memainkan alat musik atau hobi bernyanyi.' },
-        { t: 'A', q: 'Suka memadukan pakaian (fashion) atau menciptakan tren.' },
-        { t: 'A', q: 'Sangat menikmati menonton teater, drama, atau pameran seni.' },
-        { t: 'A', q: 'Merasa bangga jika memiliki gaya dan ide yang unik/berbeda dari orang lain.' },
-        { t: 'A', q: 'Hobi di bidang fotografi, videografi, atau editing media estetik.' },
-        { t: 'A', q: 'Suka mendekorasi dan menata estetika ruangan.' },
-        { t: 'S', q: 'Merasa puas jika berhasil mengajari teman yang belum paham pelajaran.' },
-        { t: 'S', q: 'Sering dan bersedia menjadi tempat curhat teman yang punya masalah.' },
-        { t: 'S', q: 'Sangat suka bekerja dalam kelompok (tim) dibandingkan sendirian.' },
-        { t: 'S', q: 'Aktif berpartisipasi dalam kegiatan bakti sosial atau relawan.' },
-        { t: 'S', q: 'Sangat tertarik mempelajari sifat, karakter, dan perilaku manusia.' },
-        { t: 'S', q: 'Memiliki kepedulian tinggi dan rela merawat orang yang sedang sakit.' },
-        { t: 'S', q: 'Sering menjadi penengah saat ada teman yang sedang berkonflik.' },
-        { t: 'S', q: 'Mudah bergaul, ramah, dan cepat akrab saat bertemu orang baru.' },
-        { t: 'E', q: 'Memiliki jiwa bisnis (suka berjualan atau mengelola usaha kecil).' },
-        { t: 'E', q: 'Percaya diri dan berani berbicara (pidato/presentasi) di depan umum.' },
-        { t: 'E', q: 'Menyukai peran sebagai ketua kelas atau pemimpin sebuah tim.' },
-        { t: 'E', q: 'Memiliki kemampuan berdebat atau meyakinkan orang lain dengan argumen.' },
-        { t: 'E', q: 'Suka merencanakan dan mengelola acara kepanitiaan (event organizer).' },
-        { t: 'E', q: 'Tertarik dengan berita tentang pergerakan ekonomi, bisnis, atau saham.' },
-        { t: 'E', q: 'Berani mengambil risiko besar demi mendapatkan kesuksesan.' },
-        { t: 'E', q: 'Memiliki cita-cita kuat menjadi direktur, pengusaha, atau tokoh politik.' },
-        { t: 'C', q: 'Selalu membuat jadwal harian agar semua tugas selesai teratur.' },
-        { t: 'C', q: 'Sangat teliti dalam mengelola uang kas kelas atau uang jajan sendiri.' },
-        { t: 'C', q: 'Suka memasukkan dan mengelola data di komputer (seperti Excel/Word).' },
-        { t: 'C', q: 'Cenderung disiplin dan selalu mengikuti aturan atau tata tertib sekolah.' },
-        { t: 'C', q: 'Menyukai pekerjaan terstruktur seperti coding atau penyusunan formula.' },
-        { t: 'C', q: 'Suka merapikan dokumen, arsip, file, atau catatan buku dengan rapi.' },
-        { t: 'C', q: 'Sangat jeli melihat kesalahan kecil (seperti typo) pada sebuah tulisan.' },
-        { t: 'C', q: 'Hobi mengoleksi atau menata barang-barang secara sistematis.' }
+        { t: 'R', q: 'Suka aktivitas merakit benda, alat elektronik, atau mesin.' },
+        { t: 'R', q: 'Lebih nyaman bekerja di luar ruangan (outdoor) atau aktivitas fisik.' },
+        { t: 'R', q: 'Suka memelihara hewan, berkebun, atau hal berbau alam.' },
+        { t: 'R', q: 'Bisa/terbiasa menggunakan alat perkakas (obeng, palu, gergaji, dll).' },
+        { t: 'I', q: 'Merasa tertantang jika disuruh memecahkan soal logika atau matematika rumit.' },
+        { t: 'I', q: 'Suka melakukan eksperimen atau mencari tahu cara kerja sesuatu.' },
+        { t: 'I', q: 'Lebih suka membaca artikel sains/teknologi/sejarah dibanding berita selebriti.' },
+        { t: 'I', q: 'Nyaman menganalisis grafik, peta, tabel data, atau angka statistik.' },
+        { t: 'A', q: 'Memiliki ketertarikan/hobi pada menggambar, desain grafis, atau seni rupa.' },
+        { t: 'A', q: 'Bisa memainkan alat musik, menyanyi, atau aktif di seni pertunjukan.' },
+        { t: 'A', q: 'Suka berekspresi lewat tulisan (membuat cerpen, puisi, jurnal).' },
+        { t: 'A', q: 'Sangat peduli dengan estetika visual (fotografi, mix & match baju, dekorasi).' },
+        { t: 'S', q: 'Merasa senang dan puas jika berhasil membantu teman memahami pelajaran.' },
+        { t: 'S', q: 'Sering dicari teman untuk menjadi pendengar yang baik (tempat curhat).' },
+        { t: 'S', q: 'Lebih suka mengerjakan tugas secara berkelompok dibanding sendirian.' },
+        { t: 'S', q: 'Mudah tergerak untuk ikut kegiatan sosial, panti asuhan, atau relawan.' },
+        { t: 'E', q: 'Berani dan percaya diri berbicara atau presentasi di depan orang banyak.' },
+        { t: 'E', q: 'Memiliki insting bisnis (suka berjualan atau mencari peluang uang).' },
+        { t: 'E', q: 'Suka mengambil peran sebagai ketua kelas atau pemimpin dalam kepanitiaan.' },
+        { t: 'E', q: 'Jago meyakinkan, negosiasi, atau berdebat argumen dengan orang lain.' },
+        { t: 'C', q: 'Sangat terganggu jika jadwal harian atau barang-barang tidak tertata rapi.' },
+        { t: 'C', q: 'Sangat teliti dan hati-hati saat menghitung/mengelola uang kas.' },
+        { t: 'C', q: 'Lebih suka mengikuti instruksi dan aturan yang sudah jelas langkah-langkahnya.' },
+        { t: 'C', q: 'Betah melakukan pekerjaan berulang seperti memasukkan data ke tabel (Excel/Word).' }
     ];
 
-    const kedinasanQuestions = [
-        { t: 'K', q: 'Saya sanggup rutin latihan lari, push-up, atau renang untuk tes fisik.' },
-        { t: 'K', q: 'Saya siap 100% tinggal di asrama dengan aturan disiplin ala militer.' },
-        { t: 'K', q: 'Saya ikhlas ditempatkan bekerja di pelosok manapun di Indonesia.' },
-        { t: 'K', q: 'Tinggi badan dan penglihatan saya memenuhi syarat masuk dinas resmi.' }
-    ];
+    let userProfile = { major1: '', major2: '', rawGrades: {}, riasecScores: {} };
 
-    // --- STATE SYSTEM ---
-    let userProfile = { major1: '', major2: '', scores: {}, riasecScores: {}, kedinasanScore: 0 };
-
-    window.onload = function() {
+    window.onload = () => {
         const sel1 = document.getElementById('targetMajor1');
         const sel2 = document.getElementById('targetMajor2');
+        sel1.innerHTML = '<option value="" disabled selected>-- Pilih Program Studi --</option>';
+        sel2.innerHTML = '<option value="" disabled selected>-- Pilih Program Studi --</option>';
         
-        // Sorting dropdown alphabetically
-        const sortedKeys = Object.keys(majorsData).sort((a,b) => majorsData[a].name.localeCompare(majorsData[b].name));
-        sortedKeys.forEach(key => {
-            const opt = `<option value="${key}">${majorsData[key].name}</option>`;
-            sel1.innerHTML += opt;
-            sel2.innerHTML += opt;
+        // Grouping majors by category
+        const categories = {};
+        Object.keys(majorsData).forEach(k => {
+            const cat = majorsData[k].cat;
+            if(!categories[cat]) categories[cat] = [];
+            categories[cat].push({id: k, name: majorsData[k].name});
+        });
+
+        Object.keys(categories).sort().forEach(cat => {
+            let optGroup1 = document.createElement('optgroup');
+            optGroup1.label = cat;
+            let optGroup2 = document.createElement('optgroup');
+            optGroup2.label = cat;
+            
+            categories[cat].sort((a,b) => a.name.localeCompare(b.name)).forEach(major => {
+                optGroup1.innerHTML += `<option value="${major.id}">${major.name}</option>`;
+                optGroup2.innerHTML += `<option value="${major.id}">${major.name}</option>`;
+            });
+            sel1.appendChild(optGroup1);
+            sel2.appendChild(optGroup2);
+        });
+
+        // Populate TKA Table dynamically
+        const tTable = document.getElementById('tkaTable');
+        tkaSubjects.forEach(sub => {
+            tTable.innerHTML += `
+                <tr class="tka-row">
+                    <td>${sub.name}</td>
+                    <td><input type="number" id="k11p_${sub.id}_s1" class="tka-input" max="100" placeholder="Kosongkan jika tdk ada"></td>
+                    <td><input type="number" id="k11p_${sub.id}_s2" class="tka-input" max="100" placeholder="Kosongkan jika tdk ada"></td>
+                </tr>
+            `;
         });
     };
 
-    function updateProgress(step) { document.getElementById('progressBar').style.width = (step / 4) * 100 + '%'; }
-
-    function nextStep(step) {
-        if (step === 1) {
-            const m1 = document.getElementById('targetMajor1').value;
-            const m2 = document.getElementById('targetMajor2').value;
-            if (!m1 || !m2) { alert("Perhatian: Harap pilih Jurusan Utama dan Jurusan Cadangan."); return; }
-            if (m1 === m2) { if(!confirm("Peringatan: Jurusan Utama dan Cadangan yang Anda pilih SAMA. Ingin tetap melanjutkan?")) return; }
-            userProfile.major1 = m1; userProfile.major2 = m2;
-            renderQuestions();
-        }
-        if (step === 2) {
-            const inputs = document.querySelectorAll('#step2 input');
-            let complete = true;
-            inputs.forEach(inp => {
-                if(inp.hasAttribute('required') && !inp.value) complete = false;
-                userProfile.scores[inp.id] = parseInt(inp.value) || 0;
-            });
-            if(!complete) { alert("Lengkapi Form: Mohon isi seluruh nilai mata pelajaran rapor (0-100)."); return; }
-        }
-        
-        const currentTab = document.querySelector('.step-content.active');
-        const nextTab = document.getElementById(`step${step + 1}`);
-        if(currentTab && nextTab) {
-            currentTab.classList.remove('active');
-            nextTab.classList.add('active');
-            updateProgress(step + 1);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    function updateProgress(s) { document.getElementById('progressBar').style.width = (s/4)*100 + '%'; }
+    function prevStep(s) { switchTab(s, s-1); }
+    
+    function switchTab(from, to) {
+        document.getElementById(`step${from}`).classList.remove('active');
+        document.getElementById(`step${to}`).classList.add('active');
+        updateProgress(to);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function prevStep(step) {
-        const currentTab = document.querySelector('.step-content.active');
-        const prevTab = document.getElementById(`step${step - 1}`);
-        if(currentTab && prevTab) {
-            currentTab.classList.remove('active');
-            prevTab.classList.add('active');
-            updateProgress(step - 1);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+    function nextStep(step) {
+        if(step === 1) {
+            userProfile.major1 = document.getElementById('targetMajor1').value;
+            userProfile.major2 = document.getElementById('targetMajor2').value;
+            if(!userProfile.major1 || !userProfile.major2) return alert("Pilih jurusan utama dan cadangan terlebih dahulu.");
+            if(userProfile.major1 === userProfile.major2) return alert("Jurusan Utama dan Cadangan tidak boleh sama.");
         }
+        else if (step === 2) {
+            // Validate Umum Inputs
+            let umumInputs = document.querySelectorAll('.umum-input');
+            let isUmumComplete = true;
+            umumInputs.forEach(inp => { if(!inp.value) isUmumComplete = false; });
+            if(!isUmumComplete) return alert("Mohon lengkapi SELURUH nilai Mata Pelajaran Umum di Kelas 10 dan 11.");
+
+            // Validate Max 5 TKA
+            const selectedTKA = new Set();
+            document.querySelectorAll('.tka-input').forEach(inp => {
+                if(inp.value) selectedTKA.add(inp.id.split('_')[1]); 
+            });
+            if(selectedTKA.size > 5) return alert(`Sistem mendeteksi kamu mengisi ${selectedTKA.size} Mapel Pilihan. Aturan Kurikulum Merdeka HANYA membolehkan maksimal 5 Mapel Pilihan. Silakan hapus/kosongi nilai yang salah.`);
+            
+            // Save all inputs
+            document.querySelectorAll('input[type="number"]').forEach(inp => {
+                userProfile.rawGrades[inp.id] = parseInt(inp.value) || 0;
+            });
+            renderQuestions();
+        }
+        switchTab(step, step+1);
     }
 
     function renderQuestions() {
-        const container = document.getElementById('dynamicQuestions');
-        container.innerHTML = '';
-        
-        // Acak pertanyaan agar natural
-        const generalQs = [...psychQuestions].sort(() => Math.random() - 0.5);
-        generalQs.forEach((q, idx) => { container.innerHTML += createQuestionHTML(idx, q.q, q.t); });
+        const div = document.getElementById('dynamicQuestions');
+        div.innerHTML = '';
+        const qs = [...psychQuestions].sort(()=> Math.random()-0.5);
+        qs.forEach((q,i) => {
+            let html = `<div class="question-item"><div style="font-weight:600; font-size:1rem; margin-bottom:10px;">${i+1}. ${q.q}</div><div class="likert-scale">`;
+            for(let v=1; v<=5; v++) html += `<label class="likert-option"><input type="radio" name="q${i}" value="${v}" data-t="${q.t}" required></label>`;
+            div.innerHTML += html + `</div></div>`;
+        });
+    }
 
-        // Trigger kondisi khusus jika ada pilihan kedinasan
-        if (userProfile.major1 === 'Kedinasan_Umum' || userProfile.major2 === 'Kedinasan_Umum') {
-            document.getElementById('kedinasan-badge').style.display = 'inline-block';
-            container.innerHTML += `<div style="margin: 40px 0 20px 0; border-top: 2px dashed #cbd5e1; padding-top: 25px; text-align:center; font-weight:800; font-size:1.1rem; color: var(--kedinasan);">📋 TES KESAMAPTAAN & MENTAL KEDINASAN</div>`;
-            kedinasanQuestions.forEach((q, idx) => {
-                const realIdx = generalQs.length + idx; 
-                container.innerHTML += createQuestionHTML(realIdx, q.q, q.t, true);
-            });
+    function getAverageForSubject(tkaId) {
+        const r = userProfile.rawGrades;
+        let sum = 0, count = 0;
+        let isTakenInK11 = (r[`k11p_${tkaId}_s1`] > 0 || r[`k11p_${tkaId}_s2`] > 0);
+        
+        // SARI Logic: If TKA is not taken, fallback to K10/K11 Umum equivalent to avoid auto-fail, but mark as not taken in TKA.
+        let searchKeys = [];
+        
+        if (tkaId === 'bio' || tkaId === 'kim' || tkaId === 'fis') {
+            searchKeys = isTakenInK11 ? [`k11p_${tkaId}_s1`, `k11p_${tkaId}_s2`] : ['k10_ipa_s1', 'k10_ipa_s2'];
+        } else if (tkaId === 'sos' || tkaId === 'eko' || tkaId === 'geo' || tkaId === 'ant') {
+            searchKeys = isTakenInK11 ? [`k11p_${tkaId}_s1`, `k11p_${tkaId}_s2`] : ['k10_ips_s1', 'k10_ips_s2'];
+        } else if (tkaId === 'mtkl') {
+            searchKeys = isTakenInK11 ? [`k11p_${tkaId}_s1`, `k11p_${tkaId}_s2`] : ['k10_mtk_s1', 'k10_mtk_s2', 'k11u_mtk_s1', 'k11u_mtk_s2'];
+        } else if (tkaId === 'bindol') {
+            searchKeys = isTakenInK11 ? [`k11p_${tkaId}_s1`, `k11p_${tkaId}_s2`] : ['k10_bindo_s1', 'k10_bindo_s2', 'k11u_bindo_s1', 'k11u_bindo_s2'];
+        } else if (tkaId === 'bingl') {
+            searchKeys = isTakenInK11 ? [`k11p_${tkaId}_s1`, `k11p_${tkaId}_s2`] : ['k10_bing_s1', 'k10_bing_s2', 'k11u_bing_s1', 'k11u_bing_s2'];
+        } else if (tkaId === 'sejl') {
+            searchKeys = isTakenInK11 ? [`k11p_${tkaId}_s1`, `k11p_${tkaId}_s2`] : ['k11u_sej_s1', 'k11u_sej_s2', 'k10_ips_s1', 'k10_ips_s2'];
         } else {
-            document.getElementById('kedinasan-badge').style.display = 'none';
+            searchKeys = [`k11p_${tkaId}_s1`, `k11p_${tkaId}_s2`]; // Info, Arab
         }
+
+        searchKeys.forEach(k => {
+            if(r[k] > 0) { sum += r[k]; count++; }
+        });
+
+        let finalAvg = count > 0 ? (sum/count) : 0;
+        return { avg: finalAvg, isTakenTka: isTakenInK11 };
     }
 
-    function createQuestionHTML(idx, text, type, isSpecial = false) {
-        const specialClass = isSpecial ? 'kedinasan-card' : '';
-        const labels = ["Sangat Tdk Suka", "Tidak Suka", "Biasa Saja", "Suka", "Sangat Suka"];
-        let optionsHTML = '';
-        for(let i=1; i<=5; i++) {
-            optionsHTML += `<label class="likert-option"><input type="radio" name="q_${idx}" value="${i}" data-type="${type}" required><span class="likert-label">${labels[i-1]}</span></label>`;
-        }
-        return `<div class="question-item ${specialClass}"><div style="font-weight:600; margin-bottom:12px; font-size:1.05rem;">${idx+1}. ${text}</div><div class="likert-scale">${optionsHTML}</div></div>`;
-    }
-
-    // --- ENGINE ALGORITMA UTAMA ---
     function calculateResult() {
-        const inputs = document.querySelectorAll('#step3 input:checked');
-        let totalNeeded = psychQuestions.length;
-        if (userProfile.major1 === 'Kedinasan_Umum' || userProfile.major2 === 'Kedinasan_Umum') totalNeeded += kedinasanQuestions.length;
+        const radios = document.querySelectorAll('#step3 input:checked');
+        if(radios.length < psychQuestions.length) return alert("Belum selesai! Mohon isi seluruh pertanyaan tes minat.");
 
-        if (inputs.length < totalNeeded) { alert("Data Belum Lengkap: Mohon jawab seluruh pertanyaan asesmen minat."); return; }
+        userProfile.riasecScores = {R:0, I:0, A:0, S:0, E:0, C:0};
+        radios.forEach(r => userProfile.riasecScores[r.getAttribute('data-t')] += parseInt(r.value));
 
-        userProfile.riasecScores = { R:0, I:0, A:0, S:0, E:0, C:0 };
-        userProfile.kedinasanScore = 0; 
-
-        inputs.forEach(inp => {
-            const type = inp.getAttribute('data-type');
-            const val = parseInt(inp.value);
-            if (type === 'K') userProfile.kedinasanScore += val;
-            else userProfile.riasecScores[type] += val;
-        });
-
-        const itemsPerType = 8; 
-        const maxScorePerType = itemsPerType * 5; 
-
-        // Proses Skor Mapel (Akademik 40% + Minat 60%)
-        subjectsDB.forEach(sub => {
-            let academic = userProfile.scores[sub.inputKey] || 0;
-            let interestRaw = 0;
+        let allSubs = [];
+        tkaSubjects.forEach(sub => {
+            let data = getAverageForSubject(sub.id);
             
-            sub.riasec.forEach(type => { interestRaw += userProfile.riasecScores[type]; });
+            // Calc Interest
+            let interestScore = 0;
+            sub.riasec.forEach(t => interestScore += userProfile.riasecScores[t]);
+            // Max score per trait is 20 (assuming 4 questions per trait * 5). Total max = sub.riasec.length * 20.
+            let normInterest = Math.min((interestScore / (sub.riasec.length * 20)) * 100, 100); 
             
-            let maxPotential = sub.riasec.length * maxScorePerType;
-            let interestAvg = (interestRaw / maxPotential) * 100;
-            if(interestAvg > 100) interestAvg = 100;
-
-            sub.finalScore = (academic * 0.4) + (interestAvg * 0.6);
-            sub.interestScore = interestAvg;
-            sub.academicScore = academic;
+            allSubs.push({
+                ...sub,
+                grade: data.avg,
+                taken: data.isTakenTka,
+                matchScore: (data.avg * 0.4) + (normInterest * 0.6), // 40% Grade, 60% Interest
+                status: '', priority: 99
+            });
         });
 
-        const m1Data = majorsData[userProfile.major1];
-        const m2Data = majorsData[userProfile.major2];
-        const req1 = m1Data.req;
-        const req2 = m2Data.req;
-        let allPool = [];
+        const m1 = majorsData[userProfile.major1];
+        const m2 = majorsData[userProfile.major2];
 
-        // Logika Mutlak Penggabungan (Intersection) Plan A & Plan B
-        subjectsDB.forEach(sub => {
-            const isReq1 = req1.includes(sub.id);
-            const isReq2 = req2.includes(sub.id);
-
-            if (isReq1 && isReq2) {
-                sub.status = 'Wajib Pilihan 1 & 2'; sub.priority = 1; sub.badgeClass = 'badge-both';
-            } else if (isReq1) {
-                sub.status = 'Wajib Pilihan 1'; sub.priority = 2; sub.badgeClass = 'badge-mandatory';
-            } else if (isReq2) {
-                sub.status = 'Wajib Pilihan 2'; sub.priority = 3; sub.badgeClass = 'badge-mandatory';
-            } else {
-                sub.status = 'Pendukung Minat'; sub.priority = 4; sub.badgeClass = 'badge-supporting';
-            }
-            allPool.push(sub);
+        // Tag Priorities
+        allSubs.forEach(s => {
+            let isR1 = m1.req.includes(s.id);
+            let isR2 = m2.req.includes(s.id);
+            if(isR1 && isR2) { s.status = 'Mutlak Pilihan 1 & 2'; s.priority = 1; }
+            else if(isR1) { s.status = 'Wajib Pilihan 1'; s.priority = 2; }
+            else if(isR2) { s.status = 'Wajib Pilihan 2'; s.priority = 3; }
+            else { s.status = 'Pendukung Hobi'; s.priority = 4; }
         });
 
-        allPool.sort((a, b) => {
-            if (a.priority !== b.priority) return a.priority - b.priority;
-            return b.finalScore - a.finalScore;
+        // Sort by Priority, then by Score
+        allSubs.sort((a,b) => {
+            if(a.priority !== b.priority) return a.priority - b.priority;
+            return b.matchScore - a.matchScore;
         });
 
-        let finalSelection = allPool.slice(0, 5); // Amankan tepat 5 Mapel
-        const validityResult = calculateDiagnosticValidity(m1Data, finalSelection);
-        displayResults(finalSelection, validityResult);
-        nextStep(3);
+        const final5 = allSubs.slice(0,5);
+        generateSariReport(final5, m1, m2);
+        switchTab(3,4);
     }
 
-    function calculateDiagnosticValidity(m1Data, selection) {
-        const userScores = userProfile.riasecScores;
-        const expectedTraits = m1Data.riasec;
-        let traitMatch = 0;
-        let maxTraitMatch = expectedTraits.length * 8 * 5; 
-        
-        expectedTraits.forEach(t => { traitMatch += userScores[t]; });
-        let psychScore = (traitMatch / maxTraitMatch) * 100;
-
-        let academicPenalties = 0;
-        let lowGradeSubjects = [];
-        m1Data.req.forEach(reqId => {
-            const subj = subjectsDB.find(s => s.id === reqId);
-            const grade = userProfile.scores[subj.inputKey];
-            if (grade < 75) { academicPenalties += 15; lowGradeSubjects.push(subj.name); }
-        });
-
-        let kedinasanPenalty = 0;
-        let kedinasanMsg = "";
-        if (userProfile.major1 === 'Kedinasan_Umum') {
-            const kPercent = (userProfile.kedinasanScore / 20) * 100;
-            if (kPercent < 75) {
-                kedinasanPenalty = 40; 
-                kedinasanMsg = "⚠️ Skor kesiapan fisik atau disiplin asrama sangat rendah.";
-            }
-        }
-
-        let finalVal = Math.round(psychScore - academicPenalties - kedinasanPenalty);
-        if (finalVal < 0) finalVal = 0;
-        if (finalVal > 100) finalVal = 100;
-
-        return { score: finalVal, psychScore: psychScore, academicPenalties: academicPenalties, lowSubjects: lowGradeSubjects, kedinasanMsg: kedinasanMsg };
-    }
-
-    // --- RENDERING HASIL AKHIR ---
-    function displayResults(selection, diagnosis) {
-        const list = document.getElementById('finalList');
-        list.innerHTML = '';
-        selection.forEach(sub => {
-            list.innerHTML += `
-                <li class="mapel-item" style="border-left-color: ${sub.finalScore > 75 ? '#10b981' : '#f59e0b'}">
-                    <div>
-                        <strong style="font-size:1.1rem; color: var(--text-main);">${sub.name}</strong>
-                        <div style="font-size:0.85rem; color:#64748b; margin-top:5px; font-weight:600;">
-                           Total Skor: ${Math.round(sub.finalScore)}% <span style="font-weight:normal;">(Nilai Rapor: ${sub.academicScore} | Skor Minat: ${Math.round(sub.interestScore)}%)</span>
+    function generateSariReport(final5, m1, m2) {
+        const listDiv = document.getElementById('finalList');
+        listDiv.innerHTML = '';
+        final5.forEach(s => {
+            let clr = s.priority < 4 ? 'var(--primary-dark)' : 'var(--success)';
+            let isMissingReq = (s.priority < 4 && !s.taken);
+            let warn = isMissingReq ? `<br><span style="color:var(--danger); font-size:0.75rem;">⚠️ Mapel ini WAJIB untuk SNBP namun terdeteksi TIDAK diambil di pilihan TKA.</span>` : '';
+            
+            listDiv.innerHTML += `
+                <div class="mapel-card" style="border-left-color:${isMissingReq ? 'var(--danger)' : 'var(--primary)'}">
+                    <div style="flex-grow:1;">
+                        <div style="font-weight:800; font-size:1.05rem;">${s.name}</div>
+                        <div style="font-size:0.8rem; color:#64748b; margin-top:2px;">
+                            Skor Penunjang: <b>${Math.round(s.matchScore)}%</b> (Rapor: ${Math.round(s.grade)} | Minat: ${Math.round((s.matchScore - (s.grade*0.4))/0.6)})
+                            ${warn}
                         </div>
                     </div>
-                    <span class="badge ${sub.badgeClass}">${sub.status}</span>
-                </li>
-            `;
+                    <div><span class="badge" style="background:#eff6ff; color:${clr}; border:1px solid #bfdbfe;">${s.status}</span></div>
+                </div>`;
         });
 
-        const vBox = document.getElementById('validityBox');
-        document.getElementById('validityScoreText').innerText = diagnosis.score + '%';
-        if(diagnosis.score >= 80) { vBox.style.borderColor = '#10b981'; vBox.style.background = '#f0fdf4'; vBox.style.color = '#166534'; } 
-        else if (diagnosis.score >= 55) { vBox.style.borderColor = '#f59e0b'; vBox.style.background = '#fffbeb'; vBox.style.color = '#92400e'; } 
-        else { vBox.style.borderColor = '#ef4444'; vBox.style.background = '#fef2f2'; vBox.style.color = '#991b1b'; }
+        // Check Plan B Security
+        const missingM2 = m2.req.filter(reqId => !final5.some(f => f.id === reqId));
+        if (missingM2.length === 0) {
+            document.getElementById('planBSecurity').innerHTML = `<b>🛡️ Plan B Terlindungi!</b><br><span style="font-size:0.85rem; color:#475569;">Sistem berhasil memasukkan seluruh prasyarat TKA untuk <b>${m2.name}</b> ke dalam Top 5 kamu. Kamu aman jika ingin mengubah haluan di Kelas 12.</span>`;
+        } else {
+            document.getElementById('planBSecurity').innerHTML = `<b>⚠️ Plan B Berisiko!</b><br><span style="font-size:0.85rem; color:#475569;">Batas 5 Mapel penuh terkunci oleh Pilihan 1. Prasyarat <b>${m2.name}</b> terpaksa tergeser. Pertimbangkan kembali prioritas jurusanmu.</span>`;
+            document.getElementById('planBSecurity').style.background = '#fffbeb';
+            document.getElementById('planBSecurity').style.borderColor = '#fde68a';
+        }
 
-        const scores = userProfile.riasecScores;
-        const traits = Object.keys(scores).sort((a,b) => scores[b] - scores[a]);
-        const top3 = traits.slice(0, 3).join("-");
-        document.getElementById('riasecScores').innerText = top3;
+        // Holland Code
+        const rs = userProfile.riasecScores;
+        const sortedRs = Object.keys(rs).sort((a,b) => rs[b] - rs[a]);
+        const top3Code = sortedRs.slice(0,3).join('-');
+        document.getElementById('riasecCode').innerText = top3Code;
 
-        const dateStr = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        document.getElementById('reportDate').textContent = `Dicetak pada: ${dateStr}`;
+        // Validity Diagnostics
+        let traitMatch = 0;
+        m1.riasec.forEach(t => traitMatch += rs[t]);
+        let psychPct = Math.min((traitMatch / (m1.riasec.length * 20)) * 100, 100);
 
-        const analysisDiv = document.getElementById('finalPsychAnalysis');
-        const m1Data = majorsData[userProfile.major1];
-        const m2Data = majorsData[userProfile.major2];
-        const req1Names = m1Data.req.map(id => subjectsDB.find(s => s.id === id).name).join(" dan ");
+        let acadPenalty = 0;
+        let missingNames = [];
+        let lowGradeNames = [];
         
-        let kedinasanAlert = diagnosis.kedinasanMsg ? `<div class="diagnosis-section" style="background:#fee2e2; padding:15px; border-radius:8px; border-left:4px solid #ef4444;"><div class="diagnosis-title" style="color:#b91c1c;">🚨 Peringatan Syarat Kedinasan</div><span style="color:#991b1b;">${diagnosis.kedinasanMsg} Instansi kedinasan mensyaratkan fisik prima dan kedisiplinan tingkat tinggi.</span></div>` : "";
-        let academicText = diagnosis.academicPenalties === 0 ? `✅ <b>Aman (Sesuai Standar):</b> Nilai rapor pada mata pelajaran prasyarat wajib jurusan (<b>${req1Names}</b>) terpantau stabil (≥75). Modal yang sangat baik untuk SNBP.` : `⚠️ <b>Kritis (Butuh Peningkatan):</b> Nilai rapormu pada prasyarat jurusan (<b>${diagnosis.lowSubjects.join(", ")}</b>) berada di bawah ambang aman (<75). Jika tidak ditingkatkan di Kelas 11, peluang SNBP berisiko tinggi.`;
-        let psychText = diagnosis.psychScore >= 80 ? `✅ <b>Sangat Selaras:</b> Profil kepribadian bawaanmu (<b>${top3}</b>) sangat cocok dengan iklim studi <b>${m1Data.name}</b>. Potensi <i>enjoy</i> berkuliah tanpa <i>burnout</i> sangat tinggi.` : (diagnosis.psychScore >= 50 ? `⚠️ <b>Cukup Selaras:</b> Ada kecocokan menengah. Kamu bisa mengikuti ritme jurusan ini, namun mungkin butuh daya adaptasi ekstra.` : `⛔ <b>Kurang Selaras (Risiko Salah Jurusan):</b> Karaktermu terdeteksi bertolak belakang dengan sifat asli jurusan <b>${m1Data.name}</b>. Ada potensi berat merasa tertekan di tengah perkuliahan.`);
-        let actionText = diagnosis.score >= 80 ? "<b>Pertahankan performa!</b> Fokuskan belajarmu pada 5 mapel rekomendasi di atas. Mulailah mengumpulkan sertifikat atau portofolio pendukung." : (diagnosis.score >= 60 ? "<b>Gempur kelemahanmu.</b> Naikkan porsi belajarmu secara drastis pada mapel prasyarat yang nilainya rendah. Yakinkan dirimu bahwa jurusan ini adalah panggilan hatimu." : "<b>Evaluasi ulang dan konsultasi.</b> Disarankan berdiskusi dengan Guru BK/Konselor & Orang Tua untuk mencari opsi Plan C yang lebih sesuai kodrat minat dan bakatmu.");
+        m1.req.forEach(reqId => {
+            const subj = final5.find(f => f.id === reqId);
+            if (!subj) {
+                acadPenalty += 30; // Not even in top 5
+                missingNames.push(tkaSubjects.find(s=>s.id===reqId).name);
+            } else if (!subj.taken) {
+                acadPenalty += 20; // In top 5, but wasn't taken in K11 (SARI used K10 fallback)
+                missingNames.push(subj.name);
+            } else if (subj.grade < 75) {
+                acadPenalty += 10;
+                lowGradeNames.push(subj.name);
+            }
+        });
 
-        // Cek Keamanan Plan B
-        const req2Names = m2Data.req.map(id => subjectsDB.find(s => s.id === id).name).join(" dan ");
-        const securedM2 = m2Data.req.every(id => selection.some(sub => sub.id === id));
-        let planBText = securedM2 ? `<div class="diagnosis-section" style="background:#f0fdf4; padding:15px; border-radius:8px; border-left:4px solid var(--success);"><div class="diagnosis-title">🛡️ Status Rencana Cadangan (Plan B)</div>✅ <b>Aman Mutlak!</b> Sistem sukses memasukkan seluruh prasyarat <b>${m2Data.name}</b> (<b>${req2Names}</b>) ke dalam 5 pilihan. Kamu terlindungi secara akademis jika berpindah ke Pilihan 2.</div>` : `<div class="diagnosis-section" style="background:#fffbeb; padding:15px; border-radius:8px; border-left:4px solid var(--warning);"><div class="diagnosis-title">⚠️ Status Rencana Cadangan (Plan B)</div>Terakomodasi Sebagian. Beberapa prasyarat untuk Pilihan 2 harus tergeser karena kuota batas maksimal (5 mapel) dikunci oleh Pilihan 1. Diskusikan lebih lanjut dengan Guru BK.</div>`;
+        let finalVal = Math.max(Math.round(psychPct - acadPenalty), 0);
+        document.getElementById('vScore').innerText = finalVal + '%';
 
-        analysisDiv.innerHTML = `
-            <div style="font-size:1.25rem; font-weight:800; color:var(--primary); margin-bottom:20px; border-bottom:2px solid var(--primary); display:inline-block; padding-bottom:5px;">Rincian Diagnosa Kelayakan Sistem</div>
-            ${kedinasanAlert}
-            <div class="diagnosis-section"><div class="diagnosis-title">1. Evaluasi Akademik (Syarat SNBP Pilihan Utama)</div>${academicText}</div>
-            <div class="diagnosis-section"><div class="diagnosis-title">2. Evaluasi Psikometrik (Kecocokan Gaya Belajar)</div>${psychText}</div>
-            <div class="diagnosis-section" style="background:#f8fafc; padding:20px; border-radius:8px; border-left:4px solid var(--primary);"><div class="diagnosis-title">💡 Rekomendasi Tindakan (Action Plan)</div>${actionText}</div>
-            ${planBText}
-            <div style="font-size:0.8rem; color:#94a3b8; margin-top:25px; text-align:justify; font-style:italic;">*Disclaimer Medis/Psikologis: Angka Validitas (%) di atas dihitung proporsional dari ketuntasan rapor dan rasio kecocokan kode kepribadian Holland (RIASEC). Laporan ini bersifat rekomendasi berbasis sistem. Keputusan akhir mutlak berada di tangan siswa bersama persetujuan orang tua dan bimbingan guru konselor.</div>
-        `;
+        // SARI Advice Text Generation
+        let adv = "";
+        if (finalVal >= 80) {
+            adv = `Halo! SARI melihat <b>sinkronisasi yang luar biasa</b>. Gaya belajarmu (${top3Code}) sangat *matching* dengan DNA jurusan <b>${m1.name}</b>. Fondasi nilai rapormu pada mata pelajaran prasyarat juga terpantau aman dan solid.<br><br><b>Saran SARI:</b> Pertahankan konsistensi belajarmu di Kelas 11 dan 12 pada 5 mapel di atas. Jangan lupa mulai mengumpulkan sertifikat lomba atau portofolio untuk mengamankan kursi SNBP-mu!`;
+        } else if (finalVal >= 55) {
+            adv = `Halo! SARI melihat potensimu, namun ada <b>kendala akademis</b> yang perlu segera diperbaiki. `;
+            if (missingNames.length > 0) adv += `Sistem mendeteksi kamu <b>tidak memilih mapel TKA ${missingNames.join(', ')}</b> padahal mapel tersebut adalah nyawa dari jurusan ${m1.name}. `;
+            if (lowGradeNames.length > 0) adv += `Nilai rapor pada <b>${lowGradeNames.join(', ')}</b> juga perlu didongkrak jauh di atas KKM. `;
+            adv += `<br><br><b>Saran SARI:</b> Minatmu sudah lumayan cocok, tapi secara aturan SNBP posisimu rawan. Gempur jam belajar tambahan untuk mapel prasyarat tersebut. Jika mapel itu memang tidak ada di sekolahmu, segera cari Plan C!`;
+        } else {
+            adv = `Peringatan dari SARI 🚨 Terdeteksi <b>ketidakselarasan ekstrim</b> antara kepribadian aslimu (${top3Code}) dengan tuntutan keras jurusan <b>${m1.name}</b> (yang membutuhkan ${m1.riasec.join('-')}). Ditambah lagi, pondasi akademismu pada mapel syaratnya kurang mendukung.<br><br><b>Saran SARI:</b> SARI sangat merekomendasikanmu untuk duduk bersama Guru BK dan Orang Tua. Memaksakan diri ke jurusan ini memiliki risiko tinggi gagal di SNBP atau memicu stres/salah jurusan saat kuliah nanti. Mari cari jurusan lain yang lebih menghargai bakat alamimu!`;
+        }
+
+        document.getElementById('sariAdvice').innerHTML = adv;
     }
 </script>
-
 </body>
 </html>
